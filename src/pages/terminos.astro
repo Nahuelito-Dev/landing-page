@@ -1,140 +1,142 @@
 ---
 import PaginaTexto from '../layouts/PaginaTexto.astro';
 import AvisoBorrador from '../components/AvisoBorrador.astro';
-import { contacto, linkEmail, linkWhatsapp } from '../config/contacto';
+import IndiceLegal from '../components/IndiceLegal.astro';
+import LeyendaAAIP from '../components/LeyendaAAIP.astro';
+import { contacto } from '../config/contacto';
 import { empresa } from '../config/empresa';
 
-const whatsapp = linkWhatsapp();
-const email = linkEmail();
+const mail = contacto.emailLegal;
+const indice = [
+  { id: 'servicio', texto: '1. El servicio y las partes' },
+  { id: 'cuentas', texto: '2. Cuentas y responsabilidades' },
+  { id: 'pagos', texto: '3. Pagos' },
+  { id: 'uso', texto: '4. Uso aceptable' },
+  { id: 'datos', texto: '5. Datos personales' },
+  { id: 'disponibilidad', texto: '6. Disponibilidad y mantenimiento' },
+  { id: 'propiedad', texto: '7. Propiedad intelectual' },
+  { id: 'responsabilidad', texto: '8. Alcance de la responsabilidad' },
+  { id: 'baja', texto: '9. Suspensión y baja' },
+  { id: 'cambios', texto: '10. Cambios de los términos' },
+  { id: 'ley', texto: '11. Ley aplicable y jurisdicción' },
+  { id: 'contacto', texto: '12. Contacto' },
+];
 ---
 
 <PaginaTexto
   title="Términos y condiciones — SPLG"
-  description={`Condiciones de uso de SPLG, el sistema de pedidos y reparto para distribuidoras de gas de ${empresa.nombre}.`}
+  description={`Condiciones de uso de SPLG, la plataforma de pedidos y reparto para distribuidoras de gas de ${empresa.nombre}.`}
   rotulo="Legales"
   titulo="Términos y condiciones"
   bajada="Las reglas para usar SPLG: qué ofrece el servicio, qué le toca a cada parte y cómo se termina."
-  actualizado="17 de noviembre de 2026"
+  actualizado={empresa.actualizadoLegales}
 >
   <AvisoBorrador />
+  <IndiceLegal items={indice} />
 
-  <h2>1. Qué es SPLG y quiénes son las partes</h2>
+  <h2 id="servicio">1. El servicio y las partes</h2>
   <p>
-    SPLG es un sistema en línea de pedidos, reparto y gestión para distribuidoras de gas, con un panel web, una app para
-    clientes y una app para choferes. Lo presta <strong>{empresa.nombre}</strong> ({empresa.lugar}) a cada
-    distribuidora que lo contrata («la distribuidora»). Al crear una cuenta o usar SPLG, la distribuidora acepta estos
-    términos.
+    SPLG es una plataforma en línea de pedidos, reparto y gestión para distribuidoras de gas, con un panel web y apps
+    para clientes y para choferes. La presta <strong>{empresa.nombre}</strong>, {empresa.lugar}, a cada distribuidora
+    que la contrata («la distribuidora»). Los clientes y choferes la usan por cuenta de su distribuidora. Al crear una
+    cuenta o usar SPLG se aceptan estos términos.
+  </p>
+  <p>
+    SPLG es sólo una herramienta de software para gestionar pedidos. El gas, el envasado, el estado de los cilindros, el
+    transporte y la entrega son responsabilidad exclusiva de las distribuidoras habilitadas según la normativa de la
+    Secretaría de Energía de la Nación y el ENARGAS.
   </p>
 
-  <h2>2. Cuentas y accesos</h2>
-  <ul>
-    <li>La distribuidora da de alta a su personal y a sus choferes, y define qué puede hacer cada uno.</li>
-    <li>Cada usuario cuida su contraseña. La distribuidora es responsable de lo que se haga con las cuentas que habilita.</li>
-    <li>Si detectás un acceso indebido, avisanos enseguida para poder cortarlo.</li>
-  </ul>
-
-  <h2>3. Uso aceptable</h2>
-  <p>No se puede usar SPLG para:</p>
-  <ul>
-    <li>cargar datos de personas sin tener derecho a hacerlo;</li>
-    <li>intentar acceder a datos de otra distribuidora o a partes del sistema sin permiso;</li>
-    <li>interferir con el funcionamiento del servicio o usarlo para actividades ilegales.</li>
-  </ul>
-
-  <h2>4. Planes, precios y pagos</h2>
+  <h2 id="cuentas">2. Cuentas y responsabilidades</h2>
   <ul>
     <li>
-      El servicio se presta según el plan contratado. Los precios publicados en esta página son de referencia y se
-      confirman al contratar.
+      <strong>Distribuidora:</strong> carga y mantiene al día sus datos, precios, productos, choferes y personal; decide
+      quién accede y con qué rol; es responsable de la información de sus clientes y choferes y de cumplir la normativa
+      que le corresponde (consumo, datos personales, laboral, seguridad del gas).
     </li>
     <li>
-      Los cobros a los clientes de la distribuidora con Mercado Pago se acreditan en la cuenta de Mercado Pago de la
-      distribuidora. {empresa.nombre} no recibe esos pagos.
+      <strong>Choferes y clientes:</strong> dan datos verdaderos y actuales y cuidan sus credenciales. Cada persona es
+      responsable de lo que se hace con su cuenta.
     </li>
-    <li>La distribuidora puede cambiar de plan; los cambios de precio se avisan antes de aplicarse.</li>
-  </ul>
-
-  <h2>5. Datos</h2>
-  <ul>
     <li>
-      Los datos que carga la distribuidora (clientes, pedidos, choferes, caja, envases) son de la distribuidora.
-      {empresa.nombre} los trata sólo para prestar el servicio, como se explica en la
-      <a href="/privacidad/">política de privacidad</a>.
-    </li>
-    <li>Cada distribuidora ve únicamente sus propios datos.</li>
-    <li>
-      El soporte de {empresa.nombre} accede a los datos de una distribuidora sólo con su aprobación, en sólo lectura y con
-      registro de lo que consulta (ver <a href="/seguridad/">Seguridad y datos</a>).
+      <strong>{empresa.nombre}:</strong> mantiene la plataforma, protege los datos como encargado del tratamiento y da
+      soporte, según la <a href="/privacidad/">Política de privacidad</a>.
     </li>
   </ul>
 
-  <h2>6. Módulos inteligentes</h2>
+  <h2 id="pagos">3. Pagos</h2>
   <p>
-    Los módulos inteligentes (despacho automático, planificador de taller, recompra anticipada, agrupación por recorrido,
-    recupero de envases, lector de documentos y asistente del chat) toman decisiones o hacen propuestas automáticas con
-    los datos de la operación. La distribuidora decide cuáles activa y cómo los configura. Lo que mueve dinero o
-    habilita algo (por ejemplo, un pago leído por el lector de documentos) lo confirma una persona de la distribuidora.
+    Los pagos de los pedidos los cobra la distribuidora, en efectivo o en línea con Mercado Pago. {empresa.nombre} no
+    recibe esos pagos ni es parte de la venta del gas. Los precios, promociones y totales los calcula el sistema según la
+    configuración de cada distribuidora. Los datos de tarjeta los maneja Mercado Pago. Las condiciones de venta frente al
+    consumidor (precio final, envío, plazos, cambios y derecho de arrepentimiento de la Ley 24.240 y la Res. 424/2020, con
+    sus excepciones) las fija y cumple la distribuidora. El precio de SPLG para la distribuidora se acuerda en su contrato.
   </p>
 
-  <h2>7. Disponibilidad y soporte</h2>
+  <h2 id="uso">4. Uso aceptable</h2>
   <ul>
-    <li>
-      Trabajamos para que SPLG esté disponible siempre, pero puede haber interrupciones por mantenimiento o por fallas de
-      terceros (conectividad, proveedores de nube, Mercado Pago, mapas).
-    </li>
-    <li>La base de datos se respalda todos los días.</li>
-    <li>Las consultas de soporte se atienden por los canales de contacto de esta página.</li>
+    <li>No usar SPLG para fines ilícitos ni para pedidos falsos o fraudulentos.</li>
+    <li>No intentar acceder a datos o cuentas ajenas, ni vulnerar o sobrecargar el sistema.</li>
+    <li>No copiar, revender ni hacer ingeniería inversa de la plataforma.</li>
+    <li>No cargar contenido ilegal ni datos de terceros sin derecho a hacerlo.</li>
   </ul>
 
-  <h2>8. Propiedad intelectual</h2>
+  <h2 id="datos">5. Datos personales</h2>
   <p>
-    SPLG, su código, su diseño y su marca son de {empresa.nombre}. Contratar el servicio da derecho a usarlo mientras
-    esté vigente, no a copiarlo ni a revenderlo.
+    La distribuidora es responsable de los datos de sus clientes, choferes y personal, y {empresa.nombre} es encargado
+    del tratamiento: los usa sólo para prestar el servicio, con las medidas de seguridad del art. 9 de la Ley 25.326, con
+    deber de confidencialidad, y al terminar la relación los devuelve o suprime salvo lo que deba conservarse por ley. La
+    distribuidora informa a sus clientes y choferes del tratamiento, incluida la ubicación GPS del chofer. El detalle está
+    en la <a href="/privacidad/">Política de privacidad</a>.
   </p>
 
-  <h2>9. Responsabilidad</h2>
+  <h2 id="disponibilidad">6. Disponibilidad y mantenimiento</h2>
   <p>
-    {empresa.nombre} responde por prestar el servicio con diligencia. No responde por decisiones comerciales de la
-    distribuidora, por datos cargados de forma incorrecta ni por fallas de servicios de terceros fuera de su control,
-    en la medida en que lo permita la ley.
+    Trabajamos para que SPLG esté disponible, pero <strong>no garantizamos un servicio ininterrumpido</strong>. Puede
+    haber mantenimiento, cortes de proveedores o de internet. Cuando sea posible, el mantenimiento programado se avisa.
   </p>
 
-  <h2>10. Baja y suspensión</h2>
-  <ul>
-    <li>La distribuidora puede dar de baja el servicio cuando quiera, avisándonos por los canales de contacto.</li>
-    <li>
-      {empresa.nombre} puede suspender una cuenta que no cumpla estos términos o ponga en riesgo la seguridad del sistema,
-      avisando el motivo.
-    </li>
-    <li>Al terminar, la distribuidora puede pedir una copia de sus datos.</li>
-  </ul>
-
-  <h2>11. Cambios a estos términos</h2>
+  <h2 id="propiedad">7. Propiedad intelectual</h2>
   <p>
-    Si cambiamos estos términos, publicamos la versión nueva en esta página con su fecha y se lo avisamos a las
-    distribuidoras antes de que rija.
+    El software, el diseño, las marcas y los textos de SPLG son de {empresa.nombre}. La distribuidora recibe un derecho
+    de uso no exclusivo e intransferible mientras dure su contrato. Los datos y contenidos que carga la distribuidora
+    siguen siendo suyos.
   </p>
 
-  <h2>12. Ley aplicable</h2>
+  <h2 id="responsabilidad">8. Alcance de la responsabilidad</h2>
   <p>
-    Estos términos se rigen por las leyes de la República Argentina. Ante cualquier diferencia, las partes intentan
-    primero resolverla de buena fe; si no, intervienen los tribunales ordinarios de la Provincia de Misiones.
+    {empresa.nombre} no responde por el gas ni por la entrega, ni por las decisiones comerciales de la distribuidora, ni
+    por fallas de internet o de proveedores ajenos. Los módulos automáticos sólo proponen: las decisiones con impacto
+    económico las confirma una persona. Lo anterior rige en la medida que la ley lo permita y no limita los derechos que
+    la ley da a los consumidores.
   </p>
 
-  <h2>13. Contacto</h2>
+  <h2 id="baja">9. Suspensión y baja</h2>
   <p>
-    Para cualquier consulta sobre estos términos, escribinos
-    {
-      whatsapp && (
-        <>
-          por <a href={whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp al {contacto.whatsappVisible}</a>
-        </>
-      )
-    }
-    {email && (
-      <>
-        {whatsapp ? ' o ' : ''}a <a href={email}>{contacto.email}</a>
-      </>
-    )}.
+    La distribuidora puede dar de baja el servicio según su contrato. {empresa.nombre} puede suspender o dar de baja una
+    cuenta que incumpla estos términos, con aviso cuando sea posible. La baja es lógica: la cuenta se desactiva, los datos
+    que deban conservarse por ley o para resolver reclamos quedan bloqueados y el resto se puede suprimir a pedido (ver
+    <a href="/privacidad/#baja">Baja de cuenta</a>).
   </p>
+
+  <h2 id="cambios">10. Cambios de los términos</h2>
+  <p>
+    Podemos modificar estos términos. Publicamos la versión nueva con su fecha y, si el cambio es importante, avisamos a
+    las distribuidoras con anticipación razonable. Seguir usando SPLG después del aviso implica aceptarlos.
+  </p>
+
+  <h2 id="ley">11. Ley aplicable y jurisdicción</h2>
+  <p>
+    Rigen las leyes de la República Argentina. Para cualquier controversia son competentes los tribunales ordinarios de
+    Posadas, Misiones, salvo que una norma de protección del consumidor fije otra jurisdicción, en cuyo caso los
+    consumidores pueden acudir a los tribunales de su domicilio (art. 36 de la Ley 24.240).
+  </p>
+
+  <h2 id="contacto">12. Contacto</h2>
+  <p>
+    {empresa.nombre}, {empresa.lugar}. Consultas y temas legales: <strong>{mail}</strong>. Ver también la
+    <a href="/privacidad/">Política de privacidad</a> y la <a href="/legales/">información legal</a>.
+  </p>
+
+  <LeyendaAAIP />
 </PaginaTexto>

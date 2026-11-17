@@ -12,6 +12,8 @@ export const contacto = {
   whatsappVisible: '+54 9 3755 69-6734',
   /** Casilla de mail de contacto comercial */
   email: '',
+  /** Casilla para datos personales y consultas legales (se muestra como texto) */
+  emailLegal: 'nahuel.wagner97@gmail.com',
   /** Mensaje precargado del WhatsApp */
   mensajeWhatsapp: 'Hola, quiero conocer más sobre SPLG para mi distribuidora.',
   /** Mensaje precargado del botón «Pedir una demo» */

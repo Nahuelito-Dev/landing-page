@@ -2,5 +2,7 @@
 export const empresa = {
   nombre: 'OrixTech (Nahuel Wagner)',
   producto: 'SPLG',
-  lugar: 'Misiones, Argentina',
+  lugar: 'Posadas, Misiones, Argentina',
+  /** Última actualización de las páginas legales */
+  actualizadoLegales: '17 de noviembre de 2026',
 };

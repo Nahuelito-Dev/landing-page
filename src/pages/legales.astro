@@ -1,39 +1,65 @@
 ---
 import PaginaTexto from '../layouts/PaginaTexto.astro';
 import AvisoBorrador from '../components/AvisoBorrador.astro';
+import IndiceLegal from '../components/IndiceLegal.astro';
+import LeyendaAAIP from '../components/LeyendaAAIP.astro';
 import { empresa } from '../config/empresa';
 import { contacto } from '../config/contacto';
+
+const indice = [
+  { id: 'titular', texto: 'Titular y contacto' },
+  { id: 'normas', texto: 'Normas aplicables' },
+  { id: 'documentos', texto: 'Documentos' },
+  { id: 'gas', texto: 'Alcance del servicio' },
+  { id: 'marcas', texto: 'Marcas de terceros' },
+];
 ---
 
 <PaginaTexto
   title="Legales — SPLG"
-  description={`Política de privacidad, términos y condiciones e información legal de SPLG, un producto de ${empresa.nombre}.`}
+  description={`Titular, contacto, normas aplicables y documentos legales de SPLG, un producto de ${empresa.nombre}.`}
   rotulo="Legales"
   titulo="Información legal"
-  bajada={`Todo lo legal de SPLG, un producto de ${empresa.nombre}, en un solo lugar.`}
+  bajada={`Quién está detrás de SPLG, cómo contactarlo y qué normas se aplican.`}
+  actualizado={empresa.actualizadoLegales}
 >
   <AvisoBorrador />
+  <IndiceLegal items={indice} />
 
-  <h2>Documentos</h2>
+  <h2 id="titular">Titular y contacto</h2>
   <ul>
-    <li>
-      <a href="/privacidad/">Política de privacidad</a>: qué datos tratamos, para qué y cómo ejercer tus derechos según la
-      Ley 25.326.
-    </li>
-    <li><a href="/terminos/">Términos y condiciones</a>: las reglas del servicio para las distribuidoras.</li>
-    <li><a href="/seguridad/">Seguridad y datos</a>: cómo se protege la información en SPLG.</li>
+    <li><strong>Titular:</strong> {empresa.nombre}.</li>
+    <li><strong>Domicilio:</strong> {empresa.lugar}.</li>
+    <li><strong>Datos personales y consultas legales:</strong> {contacto.emailLegal}</li>
+    <li><strong>WhatsApp:</strong> {contacto.whatsappVisible}</li>
   </ul>
 
-  <h2>Quién presta el servicio</h2>
+  <h2 id="normas">Normas aplicables</h2>
+  <ul>
+    <li>Ley N° 25.326 de Protección de los Datos Personales y su Decreto Reglamentario N° 1558/2001.</li>
+    <li>Resolución AAIP N° 14/2018 (leyenda de la Agencia de Acceso a la Información Pública).</li>
+    <li>Ley N° 24.240 de Defensa del Consumidor y la Resolución N° 424/2020 (botón de arrepentimiento), en lo que corresponda a la venta a consumidores.</li>
+  </ul>
+
+  <h2 id="documentos">Documentos</h2>
+  <ul>
+    <li><a href="/privacidad/">Política de privacidad</a>: qué datos se tratan, para qué y cómo ejercer tus derechos.</li>
+    <li><a href="/terminos/">Términos y condiciones</a>: las reglas del servicio.</li>
+    <li><a href="/seguridad/">Seguridad y datos</a>: cómo se protege la información.</li>
+  </ul>
+
+  <h2 id="gas">Alcance del servicio</h2>
   <p>
-    SPLG es un producto de <strong>{empresa.nombre}</strong>, {empresa.lugar}. Contacto: WhatsApp {contacto.whatsappVisible}{
-      contacto.email ? `, ${contacto.email}` : ''
-    }.
+    SPLG es una plataforma de software para gestionar pedidos y reparto. El gas, su envasado, el estado de los cilindros,
+    el transporte y la entrega son responsabilidad de cada distribuidora, habilitada según la Secretaría de Energía de la
+    Nación y el ENARGAS.
   </p>
 
-  <h2>Marcas de terceros</h2>
+  <h2 id="marcas">Marcas de terceros</h2>
   <p>
     Mercado Pago, WhatsApp, Google Maps, Google Play y App Store son marcas de sus respectivos dueños y se mencionan sólo
     para describir con qué servicios funciona SPLG.
   </p>
+
+  <LeyendaAAIP />
 </PaginaTexto>
