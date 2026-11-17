@@ -1,0 +1,74 @@
+---
+/** Maqueta del panel: envases con serial, estado e historial. Ilustrativa. */
+import { ArrowDownLeft, ArrowUpRight, Search } from 'lucide-react';
+
+const estados = {
+  cliente: { texto: 'En cliente', clase: 'bg-info-soft text-info' },
+  deposito: { texto: 'En depósito', clase: 'bg-success-soft text-success' },
+  reparto: { texto: 'En reparto', clase: 'bg-primary-soft text-primary-strong' },
+  revision: { texto: 'A revisar', clase: 'bg-warn-soft text-warn' },
+} as const;
+
+const envases: Array<{ serial: string; tipo: string; estado: keyof typeof estados }> = [
+  { serial: 'ENV-10-00418', tipo: '10 kg', estado: 'cliente' },
+  { serial: 'ENV-10-00419', tipo: '10 kg', estado: 'reparto' },
+  { serial: 'ENV-15-00087', tipo: '15 kg', estado: 'deposito' },
+  { serial: 'ENV-45-00012', tipo: '45 kg', estado: 'revision' },
+];
+
+const historial = [
+  { icono: ArrowUpRight, texto: 'Salió con el pedido #3A91F2', cuando: 'Hoy, 10:42' },
+  { icono: ArrowDownLeft, texto: 'Volvió al depósito', cuando: 'Ayer, 18:05' },
+  { icono: ArrowUpRight, texto: 'Salió con el pedido #3A8E07', cuando: 'Lun, 9:16' },
+];
+---
+
+<div
+  class="maqueta overflow-hidden rounded-xl border border-outline-strong/80 bg-surface shadow-[0_24px_60px_-24px_rgb(16_24_40/0.3)]"
+  aria-hidden="true"
+>
+  <div class="flex items-center justify-between gap-3 border-b border-outline px-4 py-3">
+    <p class="text-sm font-semibold tracking-tight text-ink">Envases</p>
+    <span class="flex items-center gap-1.5 rounded-md border border-outline bg-surface-sunken px-2 py-1 text-[11px] text-muted">
+      <Search size={12} /> Buscar por serial
+    </span>
+  </div>
+
+  <div class="grid sm:grid-cols-[1.25fr_1fr]">
+    <ul class="divide-y divide-outline-soft">
+      {
+        envases.map(({ serial, tipo, estado }, i) => (
+          <li class={`flex items-center gap-3 px-4 py-2.5 ${i === 0 ? 'bg-primary-soft/60' : ''}`}>
+            <span class="min-w-0 flex-1">
+              <span class="block font-mono text-[11px] font-medium text-ink">{serial}</span>
+              <span class="block text-[10px] text-muted">Garrafa {tipo}</span>
+            </span>
+            <span class={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${estados[estado].clase}`}>
+              {estados[estado].texto}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="border-t border-outline bg-surface-sunken px-4 py-3 sm:border-l sm:border-t-0">
+      <p class="font-mono text-[11px] font-semibold text-ink">ENV-10-00418</p>
+      <p class="text-[10px] text-muted">Historial de movimientos</p>
+      <ol class="mt-3 flex flex-col gap-3">
+        {
+          historial.map(({ icono: Icono, texto, cuando }) => (
+            <li class="flex gap-2">
+              <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface text-primary-strong ring-1 ring-outline">
+                <Icono size={11} strokeWidth={2.2} />
+              </span>
+              <span class="min-w-0">
+                <span class="block text-[11px] font-medium text-ink">{texto}</span>
+                <span class="block text-[10px] text-muted">{cuando}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</div>

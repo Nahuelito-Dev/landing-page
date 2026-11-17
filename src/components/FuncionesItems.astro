@@ -1,0 +1,36 @@
+---
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import type { Funcion } from '../data/funciones';
+
+type Props = {
+  items: Funcion[];
+  /** A lo ancho: dos o tres columnas */
+  columnas?: boolean;
+};
+
+const { items, columnas = false } = Astro.props;
+
+function icono(nombre: string): LucideIcon {
+  return (Icons as unknown as Record<string, LucideIcon>)[nombre];
+}
+---
+
+<ul class={`grid gap-x-8 gap-y-6 ${columnas ? 'sm:grid-cols-2 lg:grid-cols-3' : 'mt-8'}`}>
+  {
+    items.map((item) => {
+      const Icono = icono(item.icono);
+      return (
+        <li class="flex gap-3">
+          <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary-strong">
+            <Icono size={16} strokeWidth={1.8} aria-hidden="true" />
+          </span>
+          <span class="min-w-0">
+            <span class="block text-sm font-semibold text-ink">{item.titulo}</span>
+            <span class="mt-0.5 block text-sm leading-relaxed text-muted">{item.descripcion}</span>
+          </span>
+        </li>
+      );
+    })
+  }
+</ul>

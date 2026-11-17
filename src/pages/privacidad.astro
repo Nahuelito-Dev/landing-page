@@ -1,0 +1,145 @@
+---
+import PaginaTexto from '../layouts/PaginaTexto.astro';
+import AvisoBorrador from '../components/AvisoBorrador.astro';
+import { contacto, linkEmail, linkWhatsapp } from '../config/contacto';
+import { empresa } from '../config/empresa';
+
+const whatsapp = linkWhatsapp('Hola, quiero hacer una consulta sobre mis datos personales en SPLG.');
+const email = linkEmail();
+const telefonoVisible = contacto.whatsappVisible;
+---
+
+<PaginaTexto
+  title="Política de privacidad — SPLG"
+  description={`Cómo ${empresa.nombre} trata los datos personales en SPLG y en esta página, y cómo ejercer los derechos de acceso, rectificación y supresión (Ley 25.326).`}
+  rotulo="Legales"
+  titulo="Política de privacidad"
+  bajada={`Qué datos tratamos en SPLG y en esta página, para qué, con quién los compartimos y cómo ejercer tus derechos.`}
+  actualizado="17 de noviembre de 2026"
+>
+  <AvisoBorrador />
+
+  <h2>1. Quién es el responsable</h2>
+  <p>
+    SPLG es un producto de <strong>{empresa.nombre}</strong> ({empresa.lugar}). {empresa.nombre} es responsable de los
+    datos que se cargan en esta página (por ejemplo, en el formulario de demo) y de los datos de las cuentas de las
+    distribuidoras que usan SPLG.
+  </p>
+  <p>
+    Los datos que cada distribuidora carga sobre sus propios clientes, choferes y personal son de esa distribuidora,
+    que es responsable de su base de datos. Sobre esos datos, {empresa.nombre} actúa como prestador del servicio: los
+    trata sólo para hacer funcionar SPLG y según las instrucciones de la distribuidora (art. 25 de la Ley 25.326).
+  </p>
+
+  <h2>2. Qué datos tratamos</h2>
+  <h3>En esta página</h3>
+  <ul>
+    <li>
+      Formulario «Pedí una demo»: nombre y apellido, distribuidora, ciudad, cantidad aproximada de choferes y de pedidos
+      por día, email y teléfono.
+    </li>
+    <li>
+      Preferencias del sitio: el color y el modo (claro u oscuro) que elijas se guardan sólo en tu navegador
+      (almacenamiento local). No usamos cookies de seguimiento ni de publicidad.
+    </li>
+    <li>El asistente de preguntas frecuentes funciona en tu navegador y no guarda ni envía lo que escribís.</li>
+  </ul>
+  <h3>En SPLG (panel y apps)</h3>
+  <ul>
+    <li>Datos de cuenta: nombre, email, teléfono y rol.</li>
+    <li>Pedidos: productos, direcciones y ubicación de entrega, franja horaria, forma y estado del pago.</li>
+    <li>Ubicación del chofer mientras está en servicio, para ofrecerle pedidos cercanos y mostrar el seguimiento.</li>
+    <li>Documentación de choferes y vehículos que carga la distribuidora (licencia, seguro, revisión técnica).</li>
+    <li>Fotos y archivos adjuntos, mensajes del chat, calificaciones y reclamos.</li>
+    <li>Registros de auditoría: quién hizo cada cambio y cuándo, e ingresos al panel.</li>
+  </ul>
+  <p>
+    Los datos de las tarjetas los procesa Mercado Pago: SPLG no los ve ni los guarda.
+  </p>
+
+  <h2>3. Para qué los usamos</h2>
+  <ul>
+    <li>Coordinar y hacer la demo que pediste, y responder tus consultas.</li>
+    <li>Prestar el servicio: recibir y despachar pedidos, mostrar el seguimiento, registrar cobros y envases.</li>
+    <li>Cuidar la seguridad del sistema y llevar el registro de auditoría.</li>
+    <li>Cumplir obligaciones legales.</li>
+  </ul>
+  <p>No vendemos datos personales ni los usamos para publicidad de terceros.</p>
+
+  <h2>4. Con quién los compartimos</h2>
+  <p>Para funcionar, SPLG usa estos prestadores, que tratan los datos sólo para darnos su servicio:</p>
+  <ul>
+    <li>Netlify: alojamiento de esta página y de la función que recibe el formulario de demo.</li>
+    <li>Resend: envío por mail del pedido de demo al equipo de {empresa.nombre}.</li>
+    <li>Google Firebase: inicio de sesión y notificaciones de las apps.</li>
+    <li>Amazon Web Services: almacenamiento cifrado de archivos.</li>
+    <li>Mercado Pago: cobros con tarjeta y otros medios.</li>
+    <li>Google Maps: mapas, direcciones y recorridos.</li>
+    <li>
+      Anthropic: sólo si la distribuidora activa el lector de documentos o el asistente del chat, para leer los
+      documentos o contestar las consultas.
+    </li>
+  </ul>
+  <p>
+    Algunos de estos prestadores guardan datos fuera de la Argentina. Además, compartimos datos cuando lo exige una
+    autoridad con competencia para pedirlos.
+  </p>
+
+  <h2>5. Cuánto tiempo los guardamos</h2>
+  <p>
+    Los datos del formulario de demo, el tiempo necesario para coordinar la demo y el seguimiento comercial. Los datos
+    del servicio, mientras la distribuidora use SPLG y el tiempo que exijan las obligaciones legales. Podés pedir que
+    borremos tus datos en cualquier momento (ver el punto 7).
+  </p>
+
+  <h2>6. Cómo los protegemos</h2>
+  <p>
+    Archivos cifrados y links firmados que vencen, auditoría de cada cambio, respaldos diarios, roles y permisos, y
+    soporte sólo con autorización de la distribuidora. El detalle está en <a href="/seguridad/">Seguridad y datos</a>.
+  </p>
+
+  <h2>7. Tus derechos</h2>
+  <p>Como titular de los datos, según la Ley 25.326 de Protección de los Datos Personales podés:</p>
+  <ul>
+    <li>
+      <strong>Acceso:</strong> saber qué datos tuyos tenemos. Es gratuito si lo pedís con un intervalo de seis meses o
+      más, salvo que acredites un interés legítimo (art. 14).
+    </li>
+    <li>
+      <strong>Rectificación y actualización:</strong> corregir datos equivocados o desactualizados (art. 16).
+    </li>
+    <li>
+      <strong>Supresión:</strong> pedir que borremos tus datos cuando corresponda (art. 16). Respondemos los pedidos de
+      rectificación y supresión dentro de los cinco días hábiles.
+    </li>
+  </ul>
+  <p>
+    Si sos cliente o chofer de una distribuidora, también podés pedírselo a ella, que es la responsable de esos datos.
+  </p>
+  <p>
+    Para ejercerlos, escribinos
+    {
+      whatsapp && (
+        <>
+          por <a href={whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp al {telefonoVisible}</a>
+        </>
+      )
+    }
+    {email && (
+      <>
+        {whatsapp ? ' o ' : ''}a <a href={email}>{contacto.email}</a>
+      </>
+    )}. Te vamos a pedir que acredites tu identidad.
+  </p>
+  <p>
+    La Agencia de Acceso a la Información Pública, en su carácter de Órgano de Control de la Ley N° 25.326, tiene la
+    atribución de atender las denuncias y reclamos que interpongan quienes resulten afectados en sus derechos por
+    incumplimiento de las normas vigentes en materia de protección de datos personales.
+  </p>
+
+  <h2>8. Cambios a esta política</h2>
+  <p>
+    Si cambiamos esta política, publicamos la versión nueva en esta página con su fecha. Si el cambio es importante,
+    se lo avisamos a las distribuidoras.
+  </p>
+</PaginaTexto>

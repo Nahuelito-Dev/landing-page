@@ -1,0 +1,44 @@
+---
+/** Adonde vuelve el envío del formulario sin JS cuando algo falla (la Edge Function redirige acá). */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { AlertTriangle } from 'lucide-react';
+import WhatsAppIcono from '../components/WhatsAppIcono.astro';
+import { linkDemo } from '../config/contacto';
+
+const whatsapp = linkDemo();
+---
+
+<BaseLayout title="No pudimos enviar tu pedido — SPLG" description="El pedido de demo no se pudo enviar." noindex>
+  <section class="bg-bg">
+    <div class="mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6">
+      <span class="flex h-14 w-14 items-center justify-center rounded-full bg-warn-soft text-warn">
+        <AlertTriangle size={28} strokeWidth={1.8} aria-hidden="true" />
+      </span>
+      <h1 class="mt-6 font-heading text-3xl font-semibold text-ink sm:text-4xl">No pudimos enviar tu pedido</h1>
+      <p class="mt-4 text-pretty text-base leading-relaxed text-muted sm:text-lg">
+        Revisá que estén el nombre, la distribuidora, la ciudad y un teléfono válido, y que el email (si lo dejaste)
+        sea como nombre@dominio.com. Probá de nuevo; si sigue sin andar, escribinos por WhatsApp y coordinamos la demo
+        por ahí.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/#demo" class="btn-secondary inline-flex min-h-12 items-center justify-center rounded-lg px-6 text-base font-semibold">
+          Volver al formulario
+        </a>
+        {
+          whatsapp && (
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold"
+            >
+              <WhatsAppIcono size={18} />
+              Escribinos por WhatsApp
+              <span class="sr-only">(se abre WhatsApp)</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

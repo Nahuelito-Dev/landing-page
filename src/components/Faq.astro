@@ -1,0 +1,61 @@
+---
+/**
+ * Preguntas frecuentes: cada pregunta en su tarjeta. `<details>` nativo (anda sin JS y el lector de pantalla
+ * anuncia si está abierta o cerrada); el chevron gira y se pinta del principal al abrir.
+ */
+import { ChevronDown } from 'lucide-react';
+import { preguntasFrecuentes } from '../data/faq';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+---
+
+<section id="preguntas" class="border-t border-outline bg-bg py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-preguntas">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+      <EncabezadoSeccion
+        id="titulo-preguntas"
+        centrado
+        rotulo="Preguntas"
+        titulo="Preguntas frecuentes"
+        bajada="Lo que más nos preguntan las distribuidoras. Si te queda alguna duda, escribinos."
+      />
+    </div>
+
+    <div class="mx-auto mt-12 flex max-w-3xl flex-col gap-2.5">
+      {
+        preguntasFrecuentes.map((item) => (
+          <details
+            class="faq-item group rounded-xl border border-outline bg-surface/70 backdrop-blur transition-colors duration-300 hover:border-primary/40 open:border-primary/40"
+            data-revelar
+          >
+            <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 rounded-xl px-5 py-4 text-left font-heading text-base font-medium text-ink transition-colors duration-300 hover:bg-primary-soft/60 group-open:rounded-b-none [&::-webkit-details-marker]:hidden">
+              <span>{item.pregunta}</span>
+              <ChevronDown
+                size={18}
+                strokeWidth={2}
+                className="shrink-0 text-muted transition-transform duration-200 group-open:rotate-180 group-open:text-primary-strong"
+                aria-hidden="true"
+              />
+            </summary>
+            <p class="faq-respuesta px-5 pb-5 pt-1 text-sm leading-relaxed text-muted">{item.respuesta}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-item[open] .faq-respuesta {
+    animation: faq-aparece 0.25s ease;
+  }
+  @keyframes faq-aparece {
+    from {
+      opacity: 0;
+      translate: 0 -4px;
+    }
+    to {
+      opacity: 1;
+      translate: none;
+    }
+  }
+</style>

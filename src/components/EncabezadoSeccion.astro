@@ -1,0 +1,33 @@
+---
+type Props = {
+  rotulo: string;
+  titulo: string;
+  bajada?: string;
+  centrado?: boolean;
+  /** Para bandas oscuras */
+  invertido?: boolean;
+  id?: string;
+};
+
+const { rotulo, titulo, bajada, centrado = false, invertido = false, id } = Astro.props;
+---
+
+<div class={centrado ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl'}>
+  <p class={`eyebrow inline-flex items-center gap-2 ${invertido ? '!text-side-text' : ''}`}>
+    <span class={`h-px w-5 ${invertido ? 'bg-side-accent' : 'bg-primary'}`} aria-hidden="true"></span>
+    {rotulo}
+  </p>
+  <h2
+    id={id}
+    class={`mt-3 text-balance font-heading text-3xl font-semibold leading-[1.1] sm:text-4xl lg:text-[2.75rem] ${invertido ? 'text-white' : 'text-ink'}`}
+  >
+    {titulo}
+  </h2>
+  {
+    bajada && (
+      <p class={`mt-4 text-pretty text-base leading-relaxed sm:text-lg ${invertido ? 'text-side-text' : 'text-muted'}`}>
+        {bajada}
+      </p>
+    )
+  }
+</div>

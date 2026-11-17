@@ -1,0 +1,33 @@
+---
+import PaginaTexto from '../layouts/PaginaTexto.astro';
+import { puntosSeguridad } from '../data/seguridad';
+---
+
+<PaginaTexto
+  title="Seguridad y datos — SPLG"
+  description="Cómo SPLG, un producto de OrixTech (Nahuel Wagner), protege los datos de cada distribuidora: archivos cifrados, links firmados, auditoría, respaldos diarios, permisos y soporte sólo con autorización."
+  rotulo="Seguridad y datos"
+  titulo="Cómo cuidamos los datos de tu distribuidora"
+  bajada="Lo que hace SPLG hoy para proteger tu información y la de tus clientes, explicado sin vueltas."
+>
+  {
+    puntosSeguridad.map((punto) => (
+      <section>
+        <h2>{punto.titulo}</h2>
+        <ul>
+          {punto.detalle.map((linea) => (
+            <li>{linea}</li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+  <section>
+    <h2>Tus datos y los de tus clientes</h2>
+    <p>
+      Cómo tratamos los datos personales, con qué fin y cómo ejercer los derechos de acceso, rectificación y supresión
+      está en la <a href="/privacidad/">política de privacidad</a>. Las condiciones del servicio, en los
+      <a href="/terminos/">términos y condiciones</a>.
+    </p>
+  </section>
+</PaginaTexto>

@@ -1,0 +1,100 @@
+---
+/**
+ * «Demo personalizada gratis · 30 min» (patrón FreeAudit.tsx).
+ * Bloque lead-magnet con lo que se ve en la sesión de 30 minutos y accesos al formulario y a WhatsApp.
+ */
+import { ArrowRight, Check, Clock } from 'lucide-react';
+import WhatsAppIcono from './WhatsAppIcono.astro';
+import { linkDemo } from '../config/contacto';
+
+const whatsapp = linkDemo();
+
+const puntos = [
+  'Tu catálogo: vemos cómo cargar tus tipos de garrafas, envases y listas de precios.',
+  'Tus zonas: delimitamos los radios de reparto y las franjas horarias de tu operación.',
+  'Un pedido de punta a punta: cómo pide el cliente, cómo le llega al chofer y cómo lo ves en el panel en vivo.',
+];
+---
+
+<section id="demo-personalizada" class="overflow-hidden border-t border-outline bg-bg py-16 sm:py-20 lg:py-24" aria-labelledby="titulo-demo-30min">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div
+      class="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary-soft/50 via-surface to-surface p-7 sm:p-10 lg:p-12 shadow-[0_4px_24px_-8px_color-mix(in_srgb,var(--color-primary)_18%,transparent)]"
+      data-revelar
+    >
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -top-24 -right-16 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
+      >
+      </div>
+
+      <div class="relative grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+        <div class="max-w-2xl">
+          <p class="eyebrow inline-flex items-center gap-2">
+            <Clock size={15} strokeWidth={2.2} className="text-primary-strong" aria-hidden="true" />
+            Demo personalizada gratis · 30 min
+          </p>
+
+          <h2
+            id="titulo-demo-30min"
+            class="mt-3 text-balance font-heading text-2xl font-semibold leading-tight text-ink sm:text-3xl lg:text-4xl"
+          >
+            Veamos SPLG con tu catálogo, tus zonas y un pedido en vivo
+          </h2>
+
+          <p class="mt-4 text-pretty text-base leading-relaxed text-muted sm:text-lg">
+            En media hora por videollamada o llamada te mostramos el sistema adaptado a tu distribuidora, sin costo ni
+            compromiso.
+          </p>
+
+          <ul class="mt-6 flex flex-col gap-3">
+            {
+              puntos.map((punto) => (
+                <li class="flex items-start gap-3 text-sm leading-relaxed text-ink-2">
+                  <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary-strong">
+                    <Check size={13} strokeWidth={2.4} aria-hidden="true" />
+                  </span>
+                  <span>{punto}</span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <p class="mt-6 text-xs text-muted">
+            100% online, sin instalación previa y adaptado a la realidad de tu distribuidora.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-3 sm:flex-row lg:flex-col lg:items-stretch lg:min-w-[17rem]">
+          <a
+            href="#demo"
+            class="btn-primary enlace-flecha inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-center text-sm font-semibold sm:text-base"
+          >
+            Pedir demo de 30 min
+            <ArrowRight size={18} className="flecha" aria-hidden="true" />
+          </a>
+
+          {
+            whatsapp && (
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="btn-secondary inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-center text-sm font-semibold sm:text-base"
+              >
+                <WhatsAppIcono size={18} />
+                Coordinar por WhatsApp
+                <span class="sr-only">(se abre WhatsApp)</span>
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# El pedido de demo (/api/demo) es una Edge Function declarada en el propio archivo
+# (netlify/edge-functions/demo.ts, `export const config`): ahí están la ruta y el límite de envíos.
+# Variables: RESEND_API_KEY y RESEND_TO (obligatorias), RESEND_FROM (opcional).

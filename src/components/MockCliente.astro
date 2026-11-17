@@ -1,0 +1,81 @@
+---
+/** Maqueta de la app del cliente: seguimiento del pedido en vivo. Ilustrativa. */
+import { Check, MessageCircle, QrCode, Truck } from 'lucide-react';
+import Telefono from './Telefono.astro';
+
+type Props = { class?: string };
+const { class: className = '' } = Astro.props;
+
+const pasos = [
+  { texto: 'Pedido confirmado', hecho: true },
+  { texto: 'Chofer asignado', hecho: true },
+  { texto: 'En camino', actual: true },
+  { texto: 'Entregado' },
+];
+---
+
+<Telefono class={className}>
+  <!-- Mapa esquemático -->
+  <div class="relative h-44 bg-surface-muted">
+    <svg viewBox="0 0 270 176" class="absolute inset-0 h-full w-full" preserveAspectRatio="xMidYMid slice">
+      <g stroke="var(--color-surface)" stroke-width="9" fill="none">
+        <path d="M-10 120 L280 96"></path>
+        <path d="M70 -10 L92 190"></path>
+        <path d="M190 -10 L176 190"></path>
+        <path d="M-10 40 L280 58"></path>
+      </g>
+      <path
+        d="M84 120 C 110 116, 140 108, 178 100 S 182 70, 181 58"
+        stroke="var(--color-primary)"
+        stroke-width="3.5"
+        fill="none"
+        stroke-linecap="round"
+        stroke-dasharray="1 7"></path>
+      <circle cx="181" cy="58" r="13" fill="var(--color-primary)" opacity="0.16"></circle>
+      <circle cx="181" cy="58" r="6" fill="var(--color-primary)"></circle>
+      <circle cx="181" cy="58" r="2.4" fill="var(--color-surface)"></circle>
+    </svg>
+    <span class="btn-primary absolute left-[27%] top-[63%] flex h-8 w-8 items-center justify-center rounded-full">
+      <Truck size={15} strokeWidth={2} />
+    </span>
+  </div>
+
+  <div class="-mt-4 relative rounded-t-2xl bg-surface px-4 pb-4 pt-4">
+    <p class="text-[10px] font-medium text-muted">Pedido #3A91F2 · 2 × Garrafa 10 kg</p>
+    <p class="mt-0.5 text-lg font-semibold tracking-tight text-ink">Llega en 8 min</p>
+
+    <ol class="mt-3 flex flex-col gap-2">
+      {
+        pasos.map(({ texto, hecho, actual }) => (
+          <li class="flex items-center gap-2 text-[11px]">
+            <span
+              class={`flex h-4 w-4 items-center justify-center rounded-full ${
+                hecho ? 'bg-primary text-on-primary' : actual ? 'border-2 border-primary bg-surface' : 'border border-outline-strong bg-surface'
+              }`}
+            >
+              {hecho && <Check size={10} strokeWidth={3} />}
+            </span>
+            <span class={hecho || actual ? 'font-medium text-ink' : 'text-muted'}>{texto}</span>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="mt-3 flex items-center gap-2 rounded-xl border border-outline bg-surface-sunken p-2">
+      <span class="flex h-8 w-8 items-center justify-center rounded-full bg-primary-soft text-[11px] font-semibold text-primary-strong">
+        CH
+      </span>
+      <span class="min-w-0 flex-1">
+        <span class="block text-[11px] font-semibold text-ink">Tu chofer</span>
+        <span class="block text-[10px] text-muted">Utilitario · a 1,2 km</span>
+      </span>
+      <span class="flex h-7 w-7 items-center justify-center rounded-full border border-outline bg-surface text-ink-2">
+        <MessageCircle size={13} />
+      </span>
+    </div>
+
+    <span class="btn-primary mt-3 flex items-center justify-center gap-1.5 rounded-xl py-2 text-[11px] font-semibold">
+      <QrCode size={13} /> Escanear QR al recibir
+    </span>
+  </div>
+</Telefono>

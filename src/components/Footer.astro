@@ -1,0 +1,105 @@
+---
+import Logo from './Logo.astro';
+import WhatsAppIcono from './WhatsAppIcono.astro';
+import { Mail } from 'lucide-react';
+import { enlacesLegales } from '../data/navegacion';
+import { modulosInteligentes } from '../data/modulos';
+import { linkEmail, linkWhatsapp, contacto } from '../config/contacto';
+import { empresa } from '../config/empresa';
+
+const anio = new Date().getFullYear();
+const whatsapp = linkWhatsapp();
+const email = linkEmail();
+
+const producto = [
+  { href: '/#producto', label: 'Producto' },
+  { href: '/#como-funciona', label: 'En acción' },
+  { href: '/#planes', label: 'Planes' },
+  { href: '/#preguntas', label: 'Preguntas frecuentes' },
+  { href: '/seguridad/', label: 'Seguridad y datos' },
+];
+
+const columnas = 'text-sm font-semibold text-white';
+const enlace =
+  'inline-flex min-h-6 items-center underline-offset-4 decoration-side-accent/70 transition-colors hover:text-white hover:underline';
+---
+
+<footer class="relative border-t border-side-line bg-side text-side-text">
+  <div
+    class="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,var(--color-side-accent),transparent)] opacity-60"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.4fr_1fr_1.2fr_1fr_1fr]">
+    <div class="sm:col-span-2 lg:col-span-1">
+      <Logo invertido />
+      <p class="mt-4 max-w-xs text-sm leading-relaxed">
+        Pedidos, reparto y envases para distribuidoras de gas. Un producto de {empresa.nombre}.
+      </p>
+    </div>
+
+    <nav aria-labelledby="pie-producto">
+      <p id="pie-producto" class={columnas}>Producto</p>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {producto.map((l) => <li><a href={l.href} class={enlace}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-labelledby="pie-modulos">
+      <p id="pie-modulos" class={columnas}>Módulos</p>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {modulosInteligentes.map((m) => <li><a href="/#modulos" class={enlace}>{m.titulo}</a></li>)}
+      </ul>
+    </nav>
+
+    <div>
+      <p class={columnas}>Contacto</p>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        <li><a href="/#demo" class={enlace}>Pedir una demo</a></li>
+        {
+          whatsapp && (
+            <li>
+              <a href={whatsapp} target="_blank" rel="noopener noreferrer" class={`${enlace} gap-2`}>
+                <WhatsAppIcono size={14} />
+                WhatsApp
+                <span class="sr-only">(se abre WhatsApp)</span>
+              </a>
+            </li>
+          )
+        }
+        {
+          email && (
+            <li>
+              <a href={email} class={`${enlace} gap-2`}>
+                <Mail size={14} aria-hidden="true" />
+                {contacto.email}
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </div>
+
+    <nav aria-labelledby="pie-legales">
+      <p id="pie-legales" class={columnas}>Legales</p>
+      <ul class="mt-4 flex flex-col gap-2 text-sm">
+        {enlacesLegales.map((l) => <li><a href={l.href} class={enlace}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="border-t border-side-line">
+    <div
+      class="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-24 pt-6 text-xs text-side-muted sm:flex-row sm:pb-6 sm:items-center sm:justify-between sm:px-6"
+    >
+      <p>© {anio} {empresa.nombre}. SPLG es un producto de {empresa.nombre}. {empresa.lugar}.</p>
+      <a href="#" class="inline-flex min-h-6 items-center gap-1.5 transition-colors hover:text-white">
+        Volver arriba <span aria-hidden="true">↑</span>
+      </a>
+      <p class="flex items-center gap-2">
+        <span>Hecho por</span>
+        <span class="font-heading text-sm font-semibold tracking-tight text-white">{empresa.nombre}</span>
+      </p>
+    </div>
+  </div>
+</footer>

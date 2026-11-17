@@ -1,0 +1,140 @@
+---
+import PaginaTexto from '../layouts/PaginaTexto.astro';
+import AvisoBorrador from '../components/AvisoBorrador.astro';
+import { contacto, linkEmail, linkWhatsapp } from '../config/contacto';
+import { empresa } from '../config/empresa';
+
+const whatsapp = linkWhatsapp();
+const email = linkEmail();
+---
+
+<PaginaTexto
+  title="Términos y condiciones — SPLG"
+  description={`Condiciones de uso de SPLG, el sistema de pedidos y reparto para distribuidoras de gas de ${empresa.nombre}.`}
+  rotulo="Legales"
+  titulo="Términos y condiciones"
+  bajada="Las reglas para usar SPLG: qué ofrece el servicio, qué le toca a cada parte y cómo se termina."
+  actualizado="17 de noviembre de 2026"
+>
+  <AvisoBorrador />
+
+  <h2>1. Qué es SPLG y quiénes son las partes</h2>
+  <p>
+    SPLG es un sistema en línea de pedidos, reparto y gestión para distribuidoras de gas, con un panel web, una app para
+    clientes y una app para choferes. Lo presta <strong>{empresa.nombre}</strong> ({empresa.lugar}) a cada
+    distribuidora que lo contrata («la distribuidora»). Al crear una cuenta o usar SPLG, la distribuidora acepta estos
+    términos.
+  </p>
+
+  <h2>2. Cuentas y accesos</h2>
+  <ul>
+    <li>La distribuidora da de alta a su personal y a sus choferes, y define qué puede hacer cada uno.</li>
+    <li>Cada usuario cuida su contraseña. La distribuidora es responsable de lo que se haga con las cuentas que habilita.</li>
+    <li>Si detectás un acceso indebido, avisanos enseguida para poder cortarlo.</li>
+  </ul>
+
+  <h2>3. Uso aceptable</h2>
+  <p>No se puede usar SPLG para:</p>
+  <ul>
+    <li>cargar datos de personas sin tener derecho a hacerlo;</li>
+    <li>intentar acceder a datos de otra distribuidora o a partes del sistema sin permiso;</li>
+    <li>interferir con el funcionamiento del servicio o usarlo para actividades ilegales.</li>
+  </ul>
+
+  <h2>4. Planes, precios y pagos</h2>
+  <ul>
+    <li>
+      El servicio se presta según el plan contratado. Los precios publicados en esta página son de referencia y se
+      confirman al contratar.
+    </li>
+    <li>
+      Los cobros a los clientes de la distribuidora con Mercado Pago se acreditan en la cuenta de Mercado Pago de la
+      distribuidora. {empresa.nombre} no recibe esos pagos.
+    </li>
+    <li>La distribuidora puede cambiar de plan; los cambios de precio se avisan antes de aplicarse.</li>
+  </ul>
+
+  <h2>5. Datos</h2>
+  <ul>
+    <li>
+      Los datos que carga la distribuidora (clientes, pedidos, choferes, caja, envases) son de la distribuidora.
+      {empresa.nombre} los trata sólo para prestar el servicio, como se explica en la
+      <a href="/privacidad/">política de privacidad</a>.
+    </li>
+    <li>Cada distribuidora ve únicamente sus propios datos.</li>
+    <li>
+      El soporte de {empresa.nombre} accede a los datos de una distribuidora sólo con su aprobación, en sólo lectura y con
+      registro de lo que consulta (ver <a href="/seguridad/">Seguridad y datos</a>).
+    </li>
+  </ul>
+
+  <h2>6. Módulos inteligentes</h2>
+  <p>
+    Los módulos inteligentes (despacho automático, planificador de taller, recompra anticipada, agrupación por recorrido,
+    recupero de envases, lector de documentos y asistente del chat) toman decisiones o hacen propuestas automáticas con
+    los datos de la operación. La distribuidora decide cuáles activa y cómo los configura. Lo que mueve dinero o
+    habilita algo (por ejemplo, un pago leído por el lector de documentos) lo confirma una persona de la distribuidora.
+  </p>
+
+  <h2>7. Disponibilidad y soporte</h2>
+  <ul>
+    <li>
+      Trabajamos para que SPLG esté disponible siempre, pero puede haber interrupciones por mantenimiento o por fallas de
+      terceros (conectividad, proveedores de nube, Mercado Pago, mapas).
+    </li>
+    <li>La base de datos se respalda todos los días.</li>
+    <li>Las consultas de soporte se atienden por los canales de contacto de esta página.</li>
+  </ul>
+
+  <h2>8. Propiedad intelectual</h2>
+  <p>
+    SPLG, su código, su diseño y su marca son de {empresa.nombre}. Contratar el servicio da derecho a usarlo mientras
+    esté vigente, no a copiarlo ni a revenderlo.
+  </p>
+
+  <h2>9. Responsabilidad</h2>
+  <p>
+    {empresa.nombre} responde por prestar el servicio con diligencia. No responde por decisiones comerciales de la
+    distribuidora, por datos cargados de forma incorrecta ni por fallas de servicios de terceros fuera de su control,
+    en la medida en que lo permita la ley.
+  </p>
+
+  <h2>10. Baja y suspensión</h2>
+  <ul>
+    <li>La distribuidora puede dar de baja el servicio cuando quiera, avisándonos por los canales de contacto.</li>
+    <li>
+      {empresa.nombre} puede suspender una cuenta que no cumpla estos términos o ponga en riesgo la seguridad del sistema,
+      avisando el motivo.
+    </li>
+    <li>Al terminar, la distribuidora puede pedir una copia de sus datos.</li>
+  </ul>
+
+  <h2>11. Cambios a estos términos</h2>
+  <p>
+    Si cambiamos estos términos, publicamos la versión nueva en esta página con su fecha y se lo avisamos a las
+    distribuidoras antes de que rija.
+  </p>
+
+  <h2>12. Ley aplicable</h2>
+  <p>
+    Estos términos se rigen por las leyes de la República Argentina. Ante cualquier diferencia, las partes intentan
+    primero resolverla de buena fe; si no, intervienen los tribunales ordinarios de la Provincia de Misiones.
+  </p>
+
+  <h2>13. Contacto</h2>
+  <p>
+    Para cualquier consulta sobre estos términos, escribinos
+    {
+      whatsapp && (
+        <>
+          por <a href={whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp al {contacto.whatsappVisible}</a>
+        </>
+      )
+    }
+    {email && (
+      <>
+        {whatsapp ? ' o ' : ''}a <a href={email}>{contacto.email}</a>
+      </>
+    )}.
+  </p>
+</PaginaTexto>

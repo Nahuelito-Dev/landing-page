@@ -1,0 +1,62 @@
+---
+/** Maqueta de la app del chofer: oferta de un pedido cercano con tiempo para aceptar. Ilustrativa. */
+import { Clock, MapPin, Navigation, Package } from 'lucide-react';
+import Telefono from './Telefono.astro';
+
+type Props = { class?: string };
+const { class: className = '' } = Astro.props;
+---
+
+<Telefono class={className}>
+  <div class="side-glow px-4 pb-5 pt-9">
+    <p class="flex items-center gap-1.5 text-[10px] font-medium text-side-text">
+      <span class="h-1.5 w-1.5 rounded-full bg-success"></span>
+      Disponible
+    </p>
+    <p class="mt-1 text-base font-semibold tracking-tight text-white">Nuevo pedido cerca</p>
+
+    <!-- Cuenta regresiva de la oferta -->
+    <div class="relative mx-auto mt-4 flex h-24 w-24 items-center justify-center rounded-full border-[5px] border-side-raised">
+      <svg viewBox="0 0 100 100" class="absolute -left-[5px] -top-[5px] h-24 w-24 -rotate-90">
+        <circle
+          cx="50"
+          cy="50"
+          r="45.5"
+          fill="none"
+          stroke="var(--color-side-accent)"
+          stroke-width="5"
+          stroke-linecap="round"
+          stroke-dasharray="286"
+          stroke-dashoffset="95"></circle>
+      </svg>
+      <span class="text-center">
+        <span class="block font-mono text-xl font-semibold text-white">0:20</span>
+        <span class="block text-[9px] text-side-text">para aceptar</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="px-4 pb-4 pt-3">
+    <ul class="flex flex-col gap-2.5 text-[11px]">
+      <li class="flex items-start gap-2">
+        <MapPin size={14} className="mt-px shrink-0 text-primary-strong" />
+        <span><span class="block font-semibold text-ink">A 1,2 km</span><span class="text-muted">Barrio Centro</span></span>
+      </li>
+      <li class="flex items-start gap-2">
+        <Package size={14} className="mt-px shrink-0 text-primary-strong" />
+        <span><span class="block font-semibold text-ink">2 × Garrafa 10 kg</span><span class="text-muted">Retira 2 envases</span></span>
+      </li>
+      <li class="flex items-start gap-2">
+        <Clock size={14} className="mt-px shrink-0 text-primary-strong" />
+        <span><span class="block font-semibold text-ink">Entrega en el día</span><span class="text-muted">Paga en efectivo</span></span>
+      </li>
+    </ul>
+
+    <div class="mt-4 grid grid-cols-2 gap-2">
+      <span class="btn-secondary flex items-center justify-center rounded-xl py-2 text-[11px] font-semibold">Rechazar</span>
+      <span class="btn-primary flex items-center justify-center gap-1 rounded-xl py-2 text-[11px] font-semibold">
+        <Navigation size={12} /> Aceptar
+      </span>
+    </div>
+  </div>
+</Telefono>

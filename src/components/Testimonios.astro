@@ -1,0 +1,45 @@
+---
+/** Testimonios de distribuidoras (src/data/testimonios.ts). Con la lista vacía no se renderiza nada. */
+import { testimonios } from '../data/testimonios';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+---
+
+{
+  testimonios.length > 0 && (
+    <section id="testimonios" class="border-t border-outline bg-surface py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-testimonios">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6">
+        <div data-revelar>
+          <EncabezadoSeccion id="titulo-testimonios" rotulo="Distribuidoras" titulo="Lo que dicen quienes ya lo usan" />
+        </div>
+        <ul class="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {testimonios.map((t) => (
+            <li class="tarjeta flex min-w-0 flex-col rounded-2xl border border-outline bg-bg p-6" data-revelar>
+              <figure class="flex flex-1 flex-col">
+                <blockquote class="flex-1 text-pretty text-base leading-relaxed text-ink">«{t.cita}»</blockquote>
+                <figcaption class="mt-6 flex items-center gap-3 border-t border-outline pt-4 text-sm">
+                  <span
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-soft font-heading text-sm font-semibold text-primary-strong uppercase"
+                    aria-hidden="true"
+                  >
+                    {t.nombre.charAt(0)}
+                  </span>
+                  <div class="min-w-0">
+                    <span class="block font-semibold text-ink truncate">{t.nombre}</span>
+                    <span class="block text-xs text-muted truncate">
+                      {t.cargo}, {t.distribuidora}
+                      {t.ciudad ? ` (${t.ciudad})` : ''}
+                    </span>
+                  </div>
+                </figcaption>
+              </figure>
+            </li>
+          ))}
+        </ul>
+
+        <p class="mt-8 text-center text-xs text-muted" data-revelar>
+          Testimonios ilustrativos
+        </p>
+      </div>
+    </section>
+  )
+}

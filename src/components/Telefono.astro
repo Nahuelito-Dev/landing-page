@@ -1,0 +1,15 @@
+---
+/** Marco de celular para las maquetas de las apps. Decorativo. */
+type Props = { class?: string };
+const { class: className = '' } = Astro.props;
+---
+
+<div
+  class={`maqueta relative w-full max-w-[17rem] rounded-[2.25rem] border border-tinta-800 bg-tinta-900 p-2 shadow-[0_30px_60px_-24px_rgb(16_24_40/0.5)] ${className}`}
+  aria-hidden="true"
+>
+  <div class="relative overflow-hidden rounded-[1.75rem] bg-surface">
+    <div class="absolute left-1/2 top-2 z-10 h-4 w-16 -translate-x-1/2 rounded-full bg-tinta-900"></div>
+    <slot />
+  </div>
+</div>

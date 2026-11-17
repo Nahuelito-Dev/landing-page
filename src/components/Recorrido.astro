@@ -1,0 +1,280 @@
+---
+/**
+ * «El sistema en acción»: recorrido interactivo de un pedido sobre las maquetas, con pasos, anterior/
+ * siguiente y reproducir/pausar. Si hay un video cargado en `config/demo.ts`, se muestra el video.
+ *
+ * Sin JS se ven los cuatro pasos uno debajo del otro. Con JS los paneles comparten la misma celda de la
+ * grilla (la altura es la del más alto desde el principio: el cambio de paso no mueve nada).
+ * Avanza solo cada 6 s mientras está a la vista; con «menos movimiento» arranca en pausa.
+ */
+import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+import { pasos } from '../data/pasos';
+import { videoDemo } from '../config/demo';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+import MockClientePedido from './MockClientePedido.astro';
+import MockChofer from './MockChofer.astro';
+import MockCliente from './MockCliente.astro';
+import MockPanel from './MockPanel.astro';
+
+const hayVideo = Boolean(videoDemo.src);
+---
+
+<section id="como-funciona" class="border-y border-outline bg-surface py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-como-funciona">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+      <EncabezadoSeccion
+        id="titulo-como-funciona"
+        rotulo="En acción"
+        titulo="Un pedido, de la app a la puerta"
+        bajada="Así recorre un pedido el sistema: lo que ve el cliente, lo que ve el chofer y lo que ve la distribuidora."
+      />
+    </div>
+
+    {
+      hayVideo ? (
+        <div class="mt-12 overflow-hidden rounded-3xl border border-outline bg-ink" data-revelar>
+          <video
+            class="aspect-video h-auto w-full"
+            controls
+            preload="none"
+            playsinline
+            poster={videoDemo.poster || undefined}
+            aria-label={videoDemo.titulo}
+          >
+            <source src={videoDemo.src} type="video/mp4" />
+            {videoDemo.subtitulos && (
+              <track kind="captions" srclang="es" label="Castellano" src={videoDemo.subtitulos} default />
+            )}
+          </video>
+        </div>
+      ) : (
+        <div class="recorrido mt-12 grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-12" data-recorrido data-revelar>
+          <div class="relative overflow-hidden rounded-3xl border border-outline bg-bg px-4 py-10 sm:px-10 lg:col-span-7">
+            <div class="pointer-events-none absolute -bottom-28 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-primary-soft blur-3xl" aria-hidden="true" />
+            <div class="reticula pointer-events-none absolute inset-0" aria-hidden="true" />
+            <div class="recorrido-escenario relative grid gap-12 [.js_&]:gap-0">
+              {pasos.map((paso, i) => (
+                <div
+                  class={`recorrido-panel flex flex-col items-center justify-center gap-4 [.js_&]:[grid-area:1/1] ${
+                    i === 0 ? 'activo' : ''
+                  }`}
+                  data-panel={paso.id}
+                >
+                  <p class="font-mono text-xs font-semibold text-primary-strong [.js_&]:hidden">
+                    Paso {i + 1}: {paso.titulo}
+                  </p>
+                  {paso.id === 'pedido' && <MockClientePedido class="mx-auto" />}
+                  {paso.id === 'oferta' && <MockChofer class="mx-auto" />}
+                  {paso.id === 'entrega' && <MockCliente class="mx-auto" />}
+                  {paso.id === 'panel' && (
+                    <div class="w-full">
+                      <MockPanel entregaReciente />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div class="min-w-0 lg:col-span-5">
+            <ol class="flex flex-col gap-2" aria-label="Pasos del recorrido">
+              {pasos.map((paso, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class="recorrido-paso tarjeta group relative w-full overflow-hidden rounded-2xl border border-transparent px-4 py-4 text-left hover:bg-bg aria-[current=step]:border-outline aria-[current=step]:bg-bg aria-[current=step]:shadow-[0_12px_32px_-20px_rgb(16_24_40/0.3)]"
+                    data-paso={i}
+                    aria-current={i === 0 ? 'step' : undefined}
+                    disabled
+                  >
+                    <span class="absolute inset-y-3 left-0 w-1 rounded-r-full bg-primary opacity-0 transition-opacity group-aria-[current=step]:opacity-100" aria-hidden="true" />
+                    <span class="flex items-start gap-4">
+                      <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-outline bg-surface font-mono text-xs font-semibold text-muted group-aria-[current=step]:border-primary group-aria-[current=step]:bg-primary group-aria-[current=step]:text-on-primary">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span class="min-w-0 flex-1">
+                        <span class="block font-heading text-base font-semibold tracking-tight text-ink">{paso.titulo}</span>
+                        <span class="mt-1 block text-sm leading-relaxed text-muted">{paso.descripcion}</span>
+                        <span
+                          class="mt-3 hidden h-1 overflow-hidden rounded-full bg-outline motion-reduce:!hidden [.js_&]:group-aria-[current=step]:block"
+                          aria-hidden="true"
+                        >
+                          <span class="recorrido-progreso block h-full w-0 rounded-full bg-primary" />
+                        </span>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+
+            <div class="mt-5 hidden items-center gap-2 [.js_&]:flex">
+              <button
+                type="button"
+                class="btn-secondary inline-flex h-11 w-11 items-center justify-center rounded-lg"
+                data-accion="anterior"
+                aria-label="Paso anterior"
+              >
+                <ChevronLeft size={18} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                class="btn-secondary inline-flex h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold"
+                data-accion="reproducir"
+                aria-pressed="false"
+              >
+                <Pause size={16} aria-hidden="true" className="icono-pausa hidden" />
+                <Play size={16} aria-hidden="true" className="icono-play" />
+                <span class="texto-accion">Reproducir</span>
+              </button>
+              <button
+                type="button"
+                class="btn-secondary inline-flex h-11 w-11 items-center justify-center rounded-lg"
+                data-accion="siguiente"
+                aria-label="Paso siguiente"
+              >
+                <ChevronRight size={18} aria-hidden="true" />
+              </button>
+              <p class="ml-auto font-mono text-xs text-muted" data-contador aria-hidden="true">01 / 0{pasos.length}</p>
+            </div>
+            <p class="sr-only" aria-live="polite" data-anuncio></p>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  :global(.js) .recorrido-panel {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease,
+      visibility 0s linear 0.35s;
+  }
+  :global(.js) .recorrido-panel.activo {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease;
+  }
+  .recorrido-progreso.corriendo {
+    animation: avance var(--duracion-paso, 6s) linear forwards;
+  }
+  .recorrido-progreso.pausado {
+    animation-play-state: paused;
+  }
+  @keyframes avance {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const DURACION = 6000;
+
+  document.querySelectorAll<HTMLElement>('[data-recorrido]').forEach((raiz) => {
+    const paneles = [...raiz.querySelectorAll<HTMLElement>('[data-panel]')];
+    const botonesPaso = [...raiz.querySelectorAll<HTMLButtonElement>('[data-paso]')];
+    const reproducir = raiz.querySelector<HTMLButtonElement>('[data-accion="reproducir"]')!;
+    const contador = raiz.querySelector<HTMLElement>('[data-contador]');
+    const anuncio = raiz.querySelector<HTMLElement>('[data-anuncio]');
+    const total = paneles.length;
+    const menosMovimiento = matchMedia('(prefers-reduced-motion: reduce)');
+
+    let actual = 0;
+    let reproduciendo = !menosMovimiento.matches; // intención del usuario
+    let aLaVista = false;
+    let temporizador: number | undefined;
+    let restante = DURACION;
+    let inicio = 0;
+
+    botonesPaso.forEach((b) => (b.disabled = false));
+
+    const progreso = () => botonesPaso[actual].querySelector<HTMLElement>('.recorrido-progreso');
+
+    const detenerReloj = () => {
+      if (temporizador !== undefined) {
+        clearTimeout(temporizador);
+        temporizador = undefined;
+        restante -= performance.now() - inicio;
+      }
+      progreso()?.classList.add('pausado');
+    };
+
+    const arrancarReloj = () => {
+      if (!reproduciendo || !aLaVista || temporizador !== undefined) return;
+      inicio = performance.now();
+      progreso()?.classList.remove('pausado');
+      temporizador = window.setTimeout(() => {
+        temporizador = undefined;
+        ir((actual + 1) % total, false);
+      }, Math.max(restante, 0));
+    };
+
+    const pintarReproducir = () => {
+      reproducir.setAttribute('aria-pressed', String(reproduciendo));
+      reproducir.querySelector('.texto-accion')!.textContent = reproduciendo ? 'Pausar' : 'Reproducir';
+      reproducir.querySelector('.icono-pausa')?.classList.toggle('hidden', !reproduciendo);
+      reproducir.querySelector('.icono-play')?.classList.toggle('hidden', reproduciendo);
+    };
+
+    function ir(indice: number, anunciar: boolean) {
+      detenerReloj();
+      const anterior = progreso();
+      anterior?.classList.remove('corriendo', 'pausado');
+      actual = indice;
+      paneles.forEach((p, i) => p.classList.toggle('activo', i === actual));
+      botonesPaso.forEach((b, i) => {
+        if (i === actual) b.setAttribute('aria-current', 'step');
+        else b.removeAttribute('aria-current');
+      });
+      if (contador) contador.textContent = `${String(actual + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+      if (anunciar && anuncio) {
+        const titulo = botonesPaso[actual].querySelector('.font-heading')?.textContent ?? '';
+        anuncio.textContent = `Paso ${actual + 1} de ${total}: ${titulo}`;
+      }
+      restante = DURACION;
+      const barra = progreso();
+      if (barra) {
+        barra.style.setProperty('--duracion-paso', `${DURACION}ms`);
+        void barra.offsetWidth; // reinicia la animación
+        barra.classList.add('corriendo');
+        if (!reproduciendo || !aLaVista) barra.classList.add('pausado');
+      }
+      arrancarReloj();
+    }
+
+    botonesPaso.forEach((b, i) => b.addEventListener('click', () => ir(i, true)));
+    raiz.querySelector('[data-accion="anterior"]')?.addEventListener('click', () => ir((actual - 1 + total) % total, true));
+    raiz.querySelector('[data-accion="siguiente"]')?.addEventListener('click', () => ir((actual + 1) % total, true));
+    reproducir.addEventListener('click', () => {
+      reproduciendo = !reproduciendo;
+      pintarReproducir();
+      if (reproduciendo) arrancarReloj();
+      else detenerReloj();
+    });
+
+    // Sólo corre mientras se ve: fuera de pantalla queda en pausa (sin perder la intención del usuario).
+    new IntersectionObserver(
+      ([entrada]) => {
+        aLaVista = entrada.isIntersecting;
+        if (aLaVista) arrancarReloj();
+        else detenerReloj();
+      },
+      { threshold: 0.35 },
+    ).observe(raiz);
+
+    pintarReproducir();
+    ir(0, false);
+  });
+</script>

@@ -1,0 +1,27 @@
+---
+import PlanesToggle from './PlanesToggle.tsx';
+import { planes } from '../data/planes';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+---
+
+<section id="planes" class="border-t border-outline bg-surface py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-planes">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+    <EncabezadoSeccion
+      id="titulo-planes"
+      centrado
+      rotulo="Planes"
+      titulo="Un plan para cada tamaño de operación"
+      bajada="Empezá gratis con un chofer y cambiá de plan cuando lo necesites."
+    />
+    </div>
+
+    <div class="mt-10" data-revelar>
+      <PlanesToggle client:visible planes={planes} />
+    </div>
+
+    <p class="mx-auto mt-10 max-w-xl text-center text-sm text-muted">
+      Precios finales a confirmar; escribinos y armamos el plan para tu distribuidora.
+    </p>
+  </div>
+</section>

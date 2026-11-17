@@ -1,0 +1,126 @@
+---
+/**
+ * «Pedí una demo». Con JS: validación accesible y envío por fetch (JSON) a /api/demo, la Edge Function que
+ * manda el mail con Resend (netlify/edge-functions/demo.ts); estados enviando / error (con WhatsApp, sin
+ * perder lo escrito) / enviado → /gracias/. Sin JS: valida el navegador y el POST va a la misma función,
+ * que redirige a /gracias/ o a /pedido-no-enviado/.
+ */
+import { CAMPO_TIEMPO, CAMPO_TRAMPA, ENDPOINT_DEMO, camposDemo } from '../data/formularioDemo';
+import WhatsAppIcono from './WhatsAppIcono.astro';
+import { linkDemo } from '../config/contacto';
+
+const whatsapp = linkDemo();
+
+const ancho: Record<string, string> = {
+  nombre: 'sm:col-span-2',
+  distribuidora: '',
+  ciudad: '',
+  choferes: '',
+  pedidos_por_dia: '',
+  email: '',
+  telefono: '',
+};
+---
+
+<form
+  name="demo"
+  method="post"
+  action={ENDPOINT_DEMO}
+  class="formulario-demo rounded-2xl border border-outline bg-surface p-6 shadow-[0_24px_48px_-28px_rgb(16_24_40/0.35)] transition-[border-color,box-shadow] duration-300 focus-within:border-primary/40 focus-within:shadow-[0_28px_56px_-28px_color-mix(in_srgb,var(--color-primary)_45%,transparent)] sm:p-8"
+  aria-labelledby="titulo-formulario-demo"
+  data-formulario-demo
+>
+  <p class="hidden" aria-hidden="true">
+    <label>No completes este campo: <input name={CAMPO_TRAMPA} tabindex="-1" autocomplete="off" /></label>
+  </p>
+  <input type="hidden" name={CAMPO_TIEMPO} value="" />
+
+  <h3 id="titulo-formulario-demo" class="font-heading text-xl font-semibold tracking-tight text-ink">Pedí una demo</h3>
+  <p class="mt-1 text-sm text-muted">
+    Los campos con <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> son obligatorios.
+  </p>
+
+  <div class="mt-5 rounded-xl border border-danger bg-danger-soft p-4 text-sm text-ink" tabindex="-1" data-resumen role="alert" hidden>
+  </div>
+
+  <div class="mt-5 rounded-xl border border-danger bg-danger-soft p-4 text-sm text-ink" tabindex="-1" data-fallo role="alert" hidden>
+    <p class="font-semibold">No pudimos enviar tu pedido.</p>
+    <p class="mt-1 leading-relaxed">
+      Lo que escribiste sigue acá: probá de nuevo en un rato{whatsapp ? ' o escribinos por WhatsApp y coordinamos por ahí' : ''}.
+    </p>
+    {
+      whatsapp && (
+        <a
+          href={whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-3 inline-flex min-h-10 items-center gap-2 rounded-lg border border-outline-strong bg-surface px-3 font-semibold text-ink hover:border-primary"
+        >
+          <WhatsAppIcono size={16} />
+          Escribinos por WhatsApp
+          <span class="sr-only">(se abre WhatsApp)</span>
+        </a>
+      )
+    }
+  </div>
+
+  <div class="mt-5 grid gap-x-4 gap-y-5 sm:grid-cols-2">
+    {
+      camposDemo.map((campo) => {
+        const id = `demo-${campo.nombre}`;
+        const describe = [campo.ayuda ? `${id}-ayuda` : '', `${id}-error`].filter(Boolean).join(' ');
+        return (
+          <div class={ancho[campo.nombre] ?? ''}>
+            <label for={id} class="block text-sm font-medium text-ink">
+              {campo.etiqueta}
+              {campo.requerido ? (
+                <span class="text-danger" aria-hidden="true">
+                  {' '}
+                  *
+                </span>
+              ) : (
+                <span class="font-normal text-muted"> (opcional)</span>
+              )}
+            </label>
+            <input
+              id={id}
+              name={campo.nombre}
+              type={campo.tipo === 'entero' ? 'text' : campo.tipo}
+              required={campo.requerido}
+              autocomplete={campo.autocompletar}
+              inputmode={campo.tipo === 'entero' ? 'numeric' : undefined}
+              minlength={campo.minLargo}
+              maxlength={campo.maxLargo}
+              pattern={campo.patron}
+              aria-describedby={describe}
+              class="mt-1.5 block min-h-11 w-full rounded-lg border border-outline-strong bg-surface px-3 text-base text-ink shadow-[0_1px_2px_rgb(16_24_40/0.05)] transition-colors placeholder:text-faint hover:border-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30 aria-invalid:border-danger aria-invalid:ring-danger/25"
+            />
+            {campo.ayuda && (
+              <p id={`${id}-ayuda`} class="mt-1 text-xs text-muted">
+                {campo.ayuda}
+              </p>
+            )}
+            <p id={`${id}-error`} class="mt-1 text-xs font-medium text-danger empty:hidden" data-error />
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <button
+    type="submit"
+    class="btn-primary mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold disabled:cursor-wait disabled:opacity-80"
+  >
+    Enviar pedido de demo
+  </button>
+  <p class="sr-only" role="status" data-estado></p>
+  <p class="mt-3 text-xs leading-relaxed text-muted">
+    Usamos estos datos sólo para coordinar la demo. Más en la <a href="/privacidad/" class="font-medium text-primary-strong underline underline-offset-2">política de privacidad</a>.
+  </p>
+</form>
+
+<script>
+  import { iniciarFormularioDemo } from '../lib/formularioDemo';
+
+  document.querySelectorAll<HTMLFormElement>('[data-formulario-demo]').forEach((form) => iniciarFormularioDemo(form));
+</script>

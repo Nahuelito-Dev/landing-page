@@ -1,0 +1,80 @@
+---
+/**
+ * Botón flotante «Pedir una demo» (patrón HireFloat.tsx).
+ * Aparece cuando el botón del hero sale de pantalla (IntersectionObserver) y se oculta
+ * cuando la sección/formulario de demo (#demo) está a la vista.
+ * Apilado arriba del asistente para no taparlo.
+ */
+import { ArrowRight, Calendar } from 'lucide-react';
+---
+
+<a
+  href="#demo"
+  id="btn-flotante-demo"
+  aria-label="Pedir una demo para tu distribuidora"
+  class="btn-primary fixed bottom-42 right-5 z-40 inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold shadow-xl shadow-primary/30 transition-all duration-300 opacity-0 pointer-events-none translate-y-3 sm:bottom-42 sm:right-6 hover:scale-105 motion-reduce:hover:scale-100 motion-reduce:transition-none"
+  data-flotante-demo
+>
+  <Calendar size={16} strokeWidth={2.2} aria-hidden="true" />
+  <span>Pedir una demo</span>
+  <ArrowRight size={14} strokeWidth={2.2} aria-hidden="true" />
+</a>
+
+<script>
+  function iniciarBotonFlotanteDemo() {
+    const flotante = document.querySelector<HTMLAnchorElement>('[data-flotante-demo]');
+    if (!flotante) return;
+
+    const heroBoton = document.querySelector<HTMLElement>('#inicio a[href="#demo"]');
+    const demoSeccion = document.getElementById('demo');
+
+    if (!('IntersectionObserver' in window)) {
+      // Sin IntersectionObserver, no lo mostramos para no tapar contenido estático
+      return;
+    }
+
+    let heroVisible = true;
+    let demoVisible = false;
+
+    const actualizar = () => {
+      const debeVerse = !heroVisible && !demoVisible;
+      if (debeVerse) {
+        flotante.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+        flotante.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      } else {
+        flotante.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        flotante.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      }
+    };
+
+    if (heroBoton) {
+      const obsHero = new IntersectionObserver(
+        ([entry]) => {
+          heroVisible = entry.isIntersecting;
+          actualizar();
+        },
+        { threshold: 0.1 },
+      );
+      obsHero.observe(heroBoton);
+    }
+
+    if (demoSeccion) {
+      const obsDemo = new IntersectionObserver(
+        ([entry]) => {
+          demoVisible = entry.isIntersecting;
+          actualizar();
+        },
+        { threshold: 0.05 },
+      );
+      obsDemo.observe(demoSeccion);
+    }
+
+    actualizar();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarBotonFlotanteDemo, { once: true });
+  } else {
+    iniciarBotonFlotanteDemo();
+  }
+</script>

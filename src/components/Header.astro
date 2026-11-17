@@ -1,0 +1,36 @@
+---
+import Logo from './Logo.astro';
+import MenuMovil from './MenuMovil.astro';
+import InterruptorModo from './InterruptorModo.astro';
+import { enlacesNav } from '../data/navegacion';
+---
+
+<header class="fixed inset-x-0 top-0 z-50 h-16 border-b border-outline bg-surface/90 backdrop-blur-md">
+  <div class="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <Logo />
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
+      {
+        enlacesNav.map((enlace) => (
+          <a
+            href={enlace.href}
+            class="rounded-md px-3 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-surface-muted hover:text-ink"
+          >
+            {enlace.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <InterruptorModo />
+      <a
+        href="/#demo"
+        class="btn-primary hidden h-10 items-center rounded-lg px-4 text-sm font-semibold sm:inline-flex"
+      >
+        Pedir una demo
+      </a>
+      <MenuMovil enlaces={enlacesNav} />
+    </div>
+  </div>
+</header>

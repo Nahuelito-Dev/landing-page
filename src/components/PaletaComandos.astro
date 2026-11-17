@@ -1,0 +1,282 @@
+---
+/**
+ * Paleta de comandos ⌘K / Ctrl+K (patrón CommandPalette.tsx).
+ * Diálogo accesible (<dialog>) para saltar a secciones y páginas.
+ * Sin dependencias nuevas.
+ */
+import { Search, X } from 'lucide-react';
+import { linkDemo } from '../config/contacto';
+
+const whatsapp = linkDemo();
+---
+
+<dialog
+  id="paleta-comandos"
+  class="fixed left-1/2 top-[10vh] z-50 m-0 w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 rounded-2xl border border-outline bg-surface p-0 text-ink shadow-[0_24px_64px_-12px_rgb(16_24_40/0.4)] backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+  aria-modal="true"
+  aria-label="Paleta de comandos de SPLG"
+  data-paleta
+>
+  <div class="flex flex-col overflow-hidden">
+    <!-- Buscador -->
+    <div class="flex items-center gap-3 border-b border-outline px-4 py-3 sm:px-5">
+      <Search size={18} className="text-muted shrink-0" aria-hidden="true" />
+      <input
+        type="search"
+        id="paleta-buscador"
+        role="combobox"
+        aria-expanded="true"
+        aria-autocomplete="list"
+        aria-controls="paleta-lista"
+        aria-activedescendant=""
+        placeholder="Buscar sección o página... (ej. planes, chofer, seguridad)"
+        class="w-full bg-transparent text-sm sm:text-base text-ink placeholder:text-muted focus:outline-none"
+        autocomplete="off"
+        spellcheck="false"
+        data-paleta-input
+      />
+      <div class="flex items-center gap-1.5 shrink-0">
+        <kbd class="hidden rounded border border-outline bg-surface-muted px-1.5 py-0.5 font-mono text-[10px] text-muted sm:inline-block">
+          ESC
+        </kbd>
+        <button
+          type="button"
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-muted hover:bg-surface-muted hover:text-ink sm:hidden"
+          aria-label="Cerrar paleta de comandos"
+          data-paleta-cerrar
+        >
+          <X size={16} aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de resultados -->
+    <ul
+      id="paleta-lista"
+      role="listbox"
+      aria-label="Comandos disponibles"
+      class="max-h-[min(24rem,calc(100dvh-16rem))] overflow-y-auto p-2"
+      data-paleta-lista
+    >
+      <!-- Se inyectan o actualizan dinámicamente con JS -->
+    </ul>
+
+    <!-- Pie del diálogo -->
+    <div class="hidden items-center justify-between border-t border-outline bg-surface-sunken px-4 py-2 text-xs text-muted sm:flex">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1">
+          <kbd class="rounded border border-outline bg-surface px-1 py-0.5 font-mono text-[10px]">↑</kbd>
+          <kbd class="rounded border border-outline bg-surface px-1 py-0.5 font-mono text-[10px]">↓</kbd>
+          navegar
+        </span>
+        <span class="inline-flex items-center gap-1">
+          <kbd class="rounded border border-outline bg-surface px-1 py-0.5 font-mono text-[10px]">↵</kbd>
+          seleccionar
+        </span>
+      </div>
+      <span>SPLG Navegación rápida</span>
+    </div>
+  </div>
+</dialog>
+
+<script define:vars={{ whatsappLink: whatsapp }}>
+  function iniciarPaletaComandos() {
+    const dialog = document.getElementById('paleta-comandos');
+    const input = document.querySelector('[data-paleta-input]');
+    const lista = document.querySelector('[data-paleta-lista]');
+    const btnCerrar = document.querySelector('[data-paleta-cerrar]');
+
+    if (!dialog || !input || !lista) return;
+
+    const items = [
+      // Secciones
+      { id: 'inicio', label: 'Inicio', categoria: 'Sección', hint: 'Presentación de SPLG', href: '/#inicio', palabras: 'hero arriba logo inicio' },
+      { id: 'producto', label: 'El producto: tres piezas', categoria: 'Sección', hint: 'App cliente, chofer y panel', href: '/#producto', palabras: 'apps panel cliente chofer sistema' },
+      { id: 'como-funciona', label: 'En acción: un pedido en vivo', categoria: 'Sección', hint: 'Recorrido interactivo', href: '/#como-funciona', palabras: 'recorrido demo pedido entrega chofer' },
+      { id: 'como-arrancas', label: 'Cómo arrancás', categoria: 'Sección', hint: '4 pasos de puesta en marcha', href: '/#como-arrancas', palabras: 'pasos onboarding arrancar comenzar' },
+      { id: 'modulos', label: 'Módulos inteligentes', categoria: 'Sección', hint: 'Despacho, rutas, envases, cobros', href: '/#modulos', palabras: 'ia algoritmos despacho envases rutas stock' },
+      { id: 'seguridad', label: 'Seguridad y datos', categoria: 'Sección', hint: 'Protección y privacidad', href: '/#seguridad', palabras: 'seguridad datos aislamiento respaldos' },
+      { id: 'con-que-contas', label: 'Con qué contás', categoria: 'Sección', hint: 'Compromisos, soporte y capacitación', href: '/#con-que-contas', palabras: 'compromisos soporte capacitacion ayuda' },
+      { id: 'demo-personalizada', label: 'Demo personalizada gratis (30 min)', categoria: 'Sección', hint: 'Videollamada adaptada a tu zona', href: '/#demo-personalizada', palabras: 'demo videollamada gratis 30 min' },
+      { id: 'testimonios', label: 'Distribuidoras / Testimonios', categoria: 'Sección', hint: 'Experiencias de operaciones', href: '/#testimonios', palabras: 'testimonios clientes opiniones distribuidoras' },
+      { id: 'planes', label: 'Planes y precios', categoria: 'Sección', hint: 'Escalas de operación', href: '/#planes', palabras: 'planes precios costo suscripcion' },
+      { id: 'preguntas', label: 'Preguntas frecuentes', categoria: 'Sección', hint: 'Dudas habituales sobre SPLG', href: '/#preguntas', palabras: 'faq preguntas dudas ayuda' },
+      { id: 'demo', label: 'Pedir una demo (formulario)', categoria: 'Sección', hint: 'Contacto directo', href: '/#demo', palabras: 'demo formulario contacto pedir' },
+
+      // Páginas
+      { id: 'pag-seguridad', label: 'Página de Seguridad', categoria: 'Página', hint: '/seguridad/', href: '/seguridad/', palabras: 'seguridad proteccion tls backup' },
+      { id: 'pag-privacidad', label: 'Política de Privacidad', categoria: 'Página', hint: '/privacidad/', href: '/privacidad/', palabras: 'privacidad datos ley 25326' },
+      { id: 'pag-terminos', label: 'Términos y Condiciones', categoria: 'Página', hint: '/terminos/', href: '/terminos/', palabras: 'terminos condiciones servicio contrato' },
+      { id: 'pag-legales', label: 'Información Legal', categoria: 'Página', hint: '/legales/', href: '/legales/', palabras: 'legales empresa orixtech datos fiscales' },
+
+      // Contacto directo
+      ...(whatsappLink ? [{ id: 'whatsapp', label: 'Escribir por WhatsApp', categoria: 'Contacto', hint: 'Chat directo con soporte/ventas', href: whatsappLink, externo: true, palabras: 'whatsapp chat hablar mensaje' }] : []),
+    ];
+
+    let indiceActivo = 0;
+    let itemsFiltrados = [...items];
+
+    function renderizar() {
+      lista.innerHTML = '';
+      if (itemsFiltrados.length === 0) {
+        lista.innerHTML = `
+          <li class="px-4 py-8 text-center text-sm text-muted">
+            No encontramos ninguna sección ni página para esa búsqueda.
+          </li>
+        `;
+        input.removeAttribute('aria-activedescendant');
+        return;
+      }
+
+      itemsFiltrados.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.id = `paleta-opcion-${idx}`;
+        li.role = 'option';
+        li.setAttribute('aria-selected', idx === indiceActivo ? 'true' : 'false');
+        li.className = `flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm cursor-pointer transition-colors ${
+          idx === indiceActivo
+            ? 'bg-primary-soft text-primary-strong font-medium ring-1 ring-primary/20'
+            : 'text-ink-2 hover:bg-surface-muted hover:text-ink'
+        }`;
+
+        li.innerHTML = `
+          <div class="flex items-center gap-3 min-w-0">
+            <span class="text-xs uppercase font-mono tracking-wider px-1.5 py-0.5 rounded border border-outline bg-surface shrink-0 text-muted">
+              ${item.categoria}
+            </span>
+            <span class="truncate">${item.label}</span>
+          </div>
+          <span class="text-xs text-muted shrink-0 font-mono">${item.hint}</span>
+        `;
+
+        li.addEventListener('click', () => ejecutar(item));
+        li.addEventListener('mouseenter', () => {
+          indiceActivo = idx;
+          actualizarSeleccion();
+        });
+
+        lista.appendChild(li);
+      });
+
+      actualizarSeleccion();
+    }
+
+    function actualizarSeleccion() {
+      const opciones = lista.querySelectorAll('[role="option"]');
+      opciones.forEach((op, idx) => {
+        const activo = idx === indiceActivo;
+        op.setAttribute('aria-selected', activo ? 'true' : 'false');
+        if (activo) {
+          op.className =
+            'flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm cursor-pointer transition-colors bg-primary-soft text-primary-strong font-medium ring-1 ring-primary/20';
+          input.setAttribute('aria-activedescendant', op.id);
+          op.scrollIntoView({ block: 'nearest' });
+        } else {
+          op.className =
+            'flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm cursor-pointer transition-colors text-ink-2 hover:bg-surface-muted hover:text-ink';
+        }
+      });
+    }
+
+    function ejecutar(item) {
+      cerrar();
+      if (item.externo) {
+        window.open(item.href, '_blank', 'noreferrer,noopener');
+      } else if (item.href.startsWith('/#')) {
+        const id = item.href.slice(2);
+        const destino = document.getElementById(id);
+        if (destino) {
+          destino.scrollIntoView({ behavior: 'smooth' });
+          destino.focus?.({ preventScroll: true });
+        } else {
+          window.location.href = item.href;
+        }
+      } else {
+        window.location.href = item.href;
+      }
+    }
+
+    function filtrar() {
+      const q = input.value.trim().toLowerCase();
+      if (!q) {
+        itemsFiltrados = [...items];
+      } else {
+        itemsFiltrados = items.filter(
+          (it) =>
+            it.label.toLowerCase().includes(q) ||
+            it.hint.toLowerCase().includes(q) ||
+            it.categoria.toLowerCase().includes(q) ||
+            it.palabras.toLowerCase().includes(q),
+        );
+      }
+      indiceActivo = 0;
+      renderizar();
+    }
+
+    function abrir() {
+      if (dialog.open) return;
+      dialog.showModal();
+      input.value = '';
+      filtrar();
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function cerrar() {
+      if (!dialog.open) return;
+      dialog.close();
+    }
+
+    // Tecla global ⌘K / Ctrl+K
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        if (dialog.open) cerrar();
+        else abrir();
+      }
+    });
+
+    window.addEventListener('command-palette:open', abrir);
+
+    // Eventos del input
+    input.addEventListener('input', filtrar);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (itemsFiltrados.length > 0) {
+          indiceActivo = (indiceActivo + 1) % itemsFiltrados.length;
+          actualizarSeleccion();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (itemsFiltrados.length > 0) {
+          indiceActivo = (indiceActivo - 1 + itemsFiltrados.length) % itemsFiltrados.length;
+          actualizarSeleccion();
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (itemsFiltrados[indiceActivo]) {
+          ejecutar(itemsFiltrados[indiceActivo]);
+        }
+      }
+    });
+
+    // Clic fuera del contenido cierra el diálogo
+    dialog.addEventListener('click', (e) => {
+      const rect = dialog.getBoundingClientRect();
+      const fuera =
+        e.clientX < rect.left ||
+        e.clientX > rect.right ||
+        e.clientY < rect.top ||
+        e.clientY > rect.bottom;
+      if (fuera) cerrar();
+    });
+
+    btnCerrar?.addEventListener('click', cerrar);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarPaletaComandos, { once: true });
+  } else {
+    iniciarPaletaComandos();
+  }
+</script>

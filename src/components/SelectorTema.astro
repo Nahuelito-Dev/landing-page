@@ -1,0 +1,65 @@
+---
+/**
+ * «Probá el color de tu distribuidora»: un grupo de radios que cambia los roles de marca de toda
+ * la landing (variables CSS en `html[data-tema]`), sin recargar. La elección queda en
+ * localStorage; el script del <head> la aplica antes de pintar.
+ */
+import { CLAVE_TEMA, TEMA_POR_OMISION, temas } from '../data/temas';
+
+const muestras: Record<string, string> = {
+  amarillo: 'bg-tema-amarillo',
+  violeta: 'bg-tema-violeta',
+  verde: 'bg-tema-verde',
+};
+---
+
+<fieldset class="selector-tema min-w-0" data-selector-tema data-clave={CLAVE_TEMA}>
+  <legend class="text-sm font-medium text-ink-2">Probá el color de tu distribuidora</legend>
+  <div class="mt-2.5 flex flex-wrap gap-2">
+    {
+      temas.map((tema) => (
+        <label class="opcion-tema relative inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-outline-strong bg-surface py-1.5 pl-1.5 pr-3.5 text-sm font-medium text-ink shadow-[0_1px_2px_rgb(16_24_40/0.05)] transition-colors hover:border-muted has-[:checked]:border-ink has-[:checked]:ring-1 has-[:checked]:ring-ink has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary">
+          <input
+            type="radio"
+            name="tema-landing"
+            value={tema.id}
+            checked={tema.id === TEMA_POR_OMISION}
+            class="peer sr-only"
+          />
+          <span class={`h-6 w-6 shrink-0 rounded-full ${muestras[tema.id]} ring-1 ring-inset ring-black/10`} aria-hidden="true" />
+          {tema.nombre}
+        </label>
+      ))
+    }
+  </div>
+</fieldset>
+
+<script is:inline>
+  // Marca la opción guardada antes de pintar el grupo (sin salto visual del radio elegido).
+  (() => {
+    const actual = document.documentElement.dataset.tema;
+    document.querySelectorAll('[data-selector-tema] input[name="tema-landing"]').forEach((input) => {
+      input.checked = input.value === actual;
+    });
+  })();
+</script>
+
+<script>
+  import { temas } from '../data/temas';
+
+  const ids = temas.map((tema) => tema.id) as string[];
+
+  document.querySelectorAll<HTMLFieldSetElement>('[data-selector-tema]').forEach((grupo) => {
+    const clave = grupo.dataset.clave ?? '';
+    grupo.addEventListener('change', (evento) => {
+      const input = evento.target as HTMLInputElement;
+      if (input.name !== 'tema-landing' || !ids.includes(input.value)) return;
+      document.documentElement.dataset.tema = input.value;
+      try {
+        localStorage.setItem(clave, input.value);
+      } catch {
+        /* sin localStorage: el cambio vale mientras dure la visita */
+      }
+    });
+  });
+</script>

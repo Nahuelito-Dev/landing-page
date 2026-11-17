@@ -1,0 +1,395 @@
+@import 'tailwindcss';
+
+/* `dark:` sigue a la clase `dark` de <html> (sistema + interruptor), no sólo a la media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Tokens de marca SPLG (sistema visual Brasa, splg-app-admin/src/theme/brand.json).
+ *
+ * Los componentes usan roles semánticos (primary, ink, muted, side…), nunca colores sueltos.
+ * Los roles de marca cambian con el tema elegido en el selector (`html[data-tema]`): son los
+ * mismos tokens que calcula el back para una distribuidora (generador-de-tema.ts, modo claro)
+ * a partir de los colores listos del panel (themePresets.ts). Neutros, tinta y estados no se
+ * tematizan: una empresa cambia su identidad, no la semántica del sistema.
+ */
+@theme {
+  --font-heading: var(--font-geist), 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: var(--font-geist), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
+
+  /* Marca: Amarillo anaranjado (#A85B00 / #A96A00), el tema por omisión de la landing */
+  --color-primary: #a85b00;
+  --color-primary-hover: #944f00;
+  --color-primary-strong: #884800;
+  --color-primary-soft: #fff3e9;
+  --color-on-primary: #ffffff;
+  --color-primary-from: #a85b00;
+  --color-primary-to: #904d00;
+  --color-primary-edge: #804400;
+  --color-accent: #a96a00;
+  --color-accent-soft: #fff3e6;
+
+  /* Oscuro de la marca (el menú lateral del panel): fondo de las bandas oscuras */
+  --color-side: #1c0a00;
+  --color-side-raised: #271202;
+  --color-side-line: #2d1806;
+  --color-side-text: #ae9e92;
+  --color-side-muted: #98897d;
+  --color-side-accent: #c17228;
+
+  /* Muestras del selector: el principal de cada tema, fijo */
+  --color-tema-amarillo: #a85b00;
+  --color-tema-violeta: #6d28d9;
+  --color-tema-verde: #0b6e3d;
+
+  /* Neutros y estados (no se tematizan) */
+  --color-ink: #0b1220;
+  --color-ink-2: #344054;
+  --color-muted: #667085;
+  --color-faint: #98a2b3;
+  --color-outline: #e7eaee;
+  --color-outline-soft: #f0f2f5;
+  --color-outline-strong: #d0d5dd;
+  --color-surface-muted: #f0f2f5;
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #fafbfc;
+  --color-success: #067647;
+  --color-success-soft: #ecfdf3;
+  --color-danger: #b42318;
+  --color-danger-soft: #fef3f2;
+  --color-warn: #b54708;
+  --color-warn-soft: #fffaeb;
+  --color-info: #175cd3;
+  --color-info-soft: #eff8ff;
+
+  --color-tinta-100: #f0f2f5;
+  --color-tinta-200: #e7eaee;
+  --color-tinta-300: #d0d5dd;
+  --color-tinta-400: #98a2b3;
+  --color-tinta-600: #475467;
+  --color-tinta-700: #344054;
+  --color-tinta-800: #1d2939;
+  --color-tinta-900: #0b1220;
+}
+
+/* Violeta (#6D28D9 / #7B43C5) */
+:root[data-tema='violeta'] {
+  --color-primary: #6d28d9;
+  --color-primary-hover: #6008c8;
+  --color-primary-strong: #5700b8;
+  --color-primary-soft: #f5f3ff;
+  --color-primary-from: #6d28d9;
+  --color-primary-to: #5d00c4;
+  --color-primary-edge: #5100ac;
+  --color-accent: #7b43c5;
+  --color-accent-soft: #f6f3ff;
+  --color-side: #100a20;
+  --color-side-raised: #19142b;
+  --color-side-line: #1f1931;
+  --color-side-text: #a19fb0;
+  --color-side-muted: #8c899a;
+  --color-side-accent: #9367ff;
+}
+
+/* Verde (#0B6E3D / #247A48) */
+:root[data-tema='verde'] {
+  --color-primary: #0b6e3d;
+  --color-primary-hover: #005e32;
+  --color-primary-strong: #00552c;
+  --color-primary-soft: #e7fbed;
+  --color-primary-from: #0b6e3d;
+  --color-primary-to: #005b30;
+  --color-primary-edge: #004f29;
+  --color-accent: #247a48;
+  --color-accent-soft: #e5fceb;
+  --color-side: #001205;
+  --color-side-raised: #021c0c;
+  --color-side-line: #072212;
+  --color-side-text: #96a69b;
+  --color-side-muted: #819185;
+  --color-side-accent: #3e9460;
+}
+
+/*
+ * Modo oscuro (`html.dark`): los tokens oscuros del mismo generador (superficies teñidas con el tono de
+ * cada marca) y los neutros y estados oscuros de brand.json (`dark`).
+ */
+:root.dark {
+  color-scheme: dark;
+  --color-ink: #f3f4f6;
+  --color-ink-2: #c7ccd4;
+  --color-muted: #8b93a3;
+  --color-faint: #67707f;
+  --color-outline-strong: #475467;
+  --color-success: #3dbd82;
+  --color-success-soft: #0f2a1e;
+  --color-danger: #f2706a;
+  --color-danger-soft: #2e1212;
+  --color-warn: #f2b84b;
+  --color-warn-soft: #2e2210;
+  --color-info: #5b9df2;
+  --color-info-soft: #11233b;
+}
+
+:root.dark,
+:root.dark[data-tema='amarillo'] {
+  --color-primary: #a85b00;
+  --color-primary-hover: #944f00;
+  --color-primary-strong: #fca863;
+  --color-primary-soft: #2d1a0b;
+  --color-primary-from: #a85b00;
+  --color-primary-to: #904d00;
+  --color-primary-edge: #804400;
+  --color-accent: #a96a00;
+  --color-accent-soft: #2d1e0c;
+  --color-bg: #150b05;
+  --color-surface: #21170f;
+  --color-surface-sunken: #261b13;
+  --color-surface-muted: #32271f;
+  --color-outline: #40352c;
+  --color-outline-soft: #30251d;
+}
+
+:root.dark[data-tema='violeta'] {
+  --color-primary: #793be9;
+  --color-primary-hover: #6c26d7;
+  --color-primary-strong: #c0b1ff;
+  --color-primary-soft: #201a35;
+  --color-primary-from: #793be9;
+  --color-primary-to: #6921d4;
+  --color-primary-edge: #5f03c6;
+  --color-accent: #7e46c8;
+  --color-accent-soft: #251c36;
+  --color-bg: #0f0d18;
+  --color-surface: #1a1823;
+  --color-surface-sunken: #1e1c27;
+  --color-surface-muted: #2a2834;
+  --color-outline: #383542;
+  --color-outline-soft: #282632;
+}
+
+:root.dark[data-tema='verde'] {
+  --color-primary: #167442;
+  --color-primary-hover: #006536;
+  --color-primary-strong: #7fd49c;
+  --color-primary-soft: #112418;
+  --color-primary-from: #167442;
+  --color-primary-to: #006234;
+  --color-primary-edge: #00552c;
+  --color-accent: #247a48;
+  --color-accent-soft: #14261a;
+  --color-bg: #06110a;
+  --color-surface: #101c14;
+  --color-surface-sunken: #142018;
+  --color-surface-muted: #202c24;
+  --color-outline: #2d3a31;
+  --color-outline-soft: #1e2a22;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.03em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /*
+   * Botón principal de Brasa: degradé con relieve, como en el panel. El texto blanco cumple AA
+   * sobre todo el degradé en los tres temas (onPrimary/primary ≥ 5,0 y onPrimary/gradientTo ≥ 6,4).
+   */
+  .btn-primary {
+    color: var(--color-on-primary);
+    background: linear-gradient(180deg, var(--color-primary-from) 0%, var(--color-primary-to) 100%);
+    border: 1px solid var(--color-primary-edge);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.2),
+      0 1px 2px rgb(16 24 40 / 0.12),
+      0 6px 14px -6px color-mix(in srgb, var(--color-primary) 60%, transparent);
+    transition: filter 0.15s;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  /* Botón secundario sobre fondo claro */
+  .btn-secondary {
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-outline-strong);
+    box-shadow: 0 1px 2px rgb(16 24 40 / 0.06);
+    transition:
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-primary-strong);
+    color: var(--color-primary-strong);
+  }
+
+  /* Rótulo chico arriba de cada título de sección */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary-strong);
+  }
+
+  /* Brillo de la marca arriba de las bandas oscuras, como el menú del panel (principal al 22 %) */
+  .side-glow {
+    background-color: var(--color-side);
+    background-image: radial-gradient(
+      60rem 22rem at 50% -6rem,
+      color-mix(in srgb, var(--color-primary) 22%, transparent),
+      transparent 70%
+    );
+  }
+
+  /* Retícula tenue de fondo del hero */
+  .reticula {
+    background-image:
+      linear-gradient(to right, var(--color-outline-soft) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-outline-soft) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+}
+
+/*
+ * Aparición al hacer scroll. El estado oculto sólo existe con la clase `revelar` en <html>, que pone el
+ * script del <head> cuando hay JS y no se pidió menos movimiento: sin JS o con menos movimiento, todo se
+ * ve desde el principio. Es opacidad + transform: no mueve el layout (CLS 0).
+ */
+.revelar [data-revelar] {
+  opacity: 0;
+  translate: 0 14px;
+  /* `translate` (no `transform`): así no pisa el levante de las tarjetas al pasar el mouse */
+  transition:
+    opacity 0.6s ease,
+    translate 0.6s ease,
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+.revelar [data-revelar].visible {
+  opacity: 1;
+  translate: none;
+}
+
+/*
+ * Fuera de las capas a propósito: así le ganan a las utilidades de Tailwind (borde, sombra) en el hover.
+ * Con las reglas dentro de `@layer components`, `border-outline` o `shadow-[…]` las pisaban y el hover no
+ * se notaba.
+ */
+/*
+ * Tarjetas: al pasar el mouse (o con el foco adentro) se levantan, el borde toma el color principal y la
+ * sombra se tiñe de la marca. Con «menos movimiento» sólo cambian borde y sombra.
+ */
+.tarjeta,
+.tarjeta-oscura,
+.maqueta {
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+.tarjeta:hover,
+.tarjeta:focus-within {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+  box-shadow:
+    0 22px 44px -20px color-mix(in srgb, var(--color-primary) 40%, transparent),
+    0 8px 18px -12px rgb(16 24 40 / 0.18);
+}
+:root.dark .tarjeta:hover,
+:root.dark .tarjeta:focus-within {
+  border-color: color-mix(in srgb, var(--color-primary-strong) 50%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary-strong) 18%, transparent),
+    0 22px 48px -18px color-mix(in srgb, var(--color-primary) 55%, transparent);
+}
+
+/* Tarjeta sobre las bandas oscuras de la marca */
+.tarjeta-oscura:hover,
+.tarjeta-oscura:focus-within {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--color-side-accent) 55%, transparent);
+  background-color: var(--color-side-raised);
+  box-shadow: 0 22px 48px -20px color-mix(in srgb, var(--color-side-accent) 45%, transparent);
+}
+
+/* Maquetas del producto: un leve levante y zoom, y el borde que brilla con la marca */
+.maqueta:hover {
+  transform: translateY(-6px) scale(1.012);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-primary) 45%, transparent),
+    0 32px 64px -24px color-mix(in srgb, var(--color-primary) 45%, transparent),
+    0 12px 24px -16px rgb(16 24 40 / 0.25);
+}
+
+/* Link con flecha que se separa al pasar */
+.enlace-flecha .flecha {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+.enlace-flecha:hover .flecha,
+.enlace-flecha:focus-visible .flecha {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarjeta:hover,
+  .tarjeta:focus-within,
+  .tarjeta-oscura:hover,
+  .tarjeta-oscura:focus-within,
+  .maqueta:hover,
+  .enlace-flecha:hover .flecha,
+  .enlace-flecha:focus-visible .flecha {
+    transform: none;
+  }
+}

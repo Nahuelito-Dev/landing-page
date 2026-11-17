@@ -1,0 +1,78 @@
+---
+import { CalendarCheck, Mail, MonitorPlay, Settings2 } from 'lucide-react';
+import WhatsAppIcono from './WhatsAppIcono.astro';
+import FormularioDemo from './FormularioDemo.astro';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+import { linkDemo, linkEmail } from '../config/contacto';
+import { empresa } from '../config/empresa';
+
+const whatsapp = linkDemo();
+const email = linkEmail();
+
+const queIncluye = [
+  { icono: MonitorPlay, texto: 'Te mostramos el panel y las dos apps funcionando, con un pedido de punta a punta.' },
+  { icono: Settings2, texto: 'Vemos juntos cómo cargar tus zonas, tus garrafas y tu color.' },
+  { icono: CalendarCheck, texto: 'Coordinamos el día y la hora por WhatsApp o por mail.' },
+];
+---
+
+<section id="demo" class="border-t border-outline bg-bg py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-contacto">
+  <div class="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-12">
+    <div class="lg:col-span-5" data-revelar>
+      <EncabezadoSeccion
+        id="titulo-contacto"
+        rotulo="Demo"
+        titulo="Hablemos de tu distribuidora"
+        bajada={`Contanos cómo trabajás hoy y te mostramos SPLG funcionando. Te responde el equipo de ${empresa.nombre}.`}
+      />
+
+      <ul class="mt-8 flex flex-col gap-3">
+        {
+          queIncluye.map(({ icono: Icono, texto }) => (
+            <li class="tarjeta flex gap-3 rounded-xl border border-outline bg-surface/70 p-4 text-sm leading-relaxed text-ink-2 backdrop-blur">
+              <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary-soft text-primary-strong">
+                <Icono size={16} strokeWidth={1.8} aria-hidden="true" />
+              </span>
+              <span class="pt-1">{texto}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="mt-10 border-t border-outline pt-6">
+        <p class="text-sm font-medium text-ink">¿Preferís escribirnos?</p>
+        <div class="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          {
+            whatsapp && (
+              <a
+                href={whatsapp}
+                target="_blank"
+                rel="noreferrer noopener"
+                class="btn-secondary inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold"
+              >
+                <WhatsAppIcono size={16} />
+                Escribinos por WhatsApp
+                <span class="sr-only">(se abre WhatsApp)</span>
+              </a>
+            )
+          }
+          {
+            email && (
+              <a
+                href={email}
+                class="btn-secondary inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold"
+              >
+                <Mail size={16} aria-hidden="true" />
+                Escribinos un mail
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-7" data-revelar>
+      <FormularioDemo />
+    </div>
+  </div>
+</section>

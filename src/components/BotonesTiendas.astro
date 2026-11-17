@@ -1,0 +1,33 @@
+---
+/** Botones a las tiendas. Sólo se muestran los que tienen URL en config/tiendas.ts. */
+import { tiendas } from '../config/tiendas';
+
+type Props = { class?: string };
+const { class: className = '' } = Astro.props;
+
+const botones = [
+  { href: tiendas.playStore, arriba: 'Disponible en', tienda: 'Google Play' },
+  { href: tiendas.appStore, arriba: 'Descargala en', tienda: 'App Store' },
+].filter((b) => b.href);
+---
+
+{
+  botones.length > 0 && (
+    <ul class={`flex flex-wrap gap-3 ${className}`} aria-label="Descargá la app del cliente">
+      {botones.map((b) => (
+        <li>
+          <a
+            href={b.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-12 flex-col justify-center rounded-xl bg-ink px-4 py-1.5 text-bg transition-opacity hover:opacity-90"
+          >
+            <span class="text-[10px] leading-tight">{b.arriba}</span>
+            <span class="text-base font-semibold leading-tight">{b.tienda}</span>
+            <span class="sr-only">(se abre en otra pestaña)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}

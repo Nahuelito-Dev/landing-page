@@ -1,0 +1,60 @@
+---
+/**
+ * Claro / oscuro. Por omisión sigue al sistema; el interruptor fija la elección en localStorage. Sin JS
+ * no se muestra (queda el modo del sistema).
+ */
+import { Moon, Sun } from 'lucide-react';
+import { CLAVE_MODO } from '../data/temas';
+---
+
+<button
+  type="button"
+  class="interruptor-modo hidden h-10 w-10 items-center justify-center rounded-lg border border-outline bg-surface text-ink-2 transition-colors hover:border-outline-strong hover:text-ink [.js_&]:inline-flex"
+  aria-pressed="false"
+  data-clave={CLAVE_MODO}
+>
+  <span class="sr-only">Modo oscuro</span>
+  <Sun size={18} strokeWidth={1.8} className="hidden dark:block" aria-hidden="true" />
+  <Moon size={18} strokeWidth={1.8} className="block dark:hidden" aria-hidden="true" />
+</button>
+
+<script>
+  const raiz = document.documentElement;
+  const sistema = matchMedia('(prefers-color-scheme: dark)');
+  const botones = document.querySelectorAll<HTMLButtonElement>('.interruptor-modo');
+
+  const reflejar = () => {
+    const oscuro = raiz.classList.contains('dark');
+    botones.forEach((b) => b.setAttribute('aria-pressed', String(oscuro)));
+  };
+
+  const guardado = (clave: string): string | null => {
+    try {
+      return localStorage.getItem(clave);
+    } catch {
+      return null;
+    }
+  };
+
+  botones.forEach((boton) => {
+    const clave = boton.dataset.clave ?? '';
+    boton.addEventListener('click', () => {
+      const oscuro = !raiz.classList.contains('dark');
+      raiz.classList.toggle('dark', oscuro);
+      try {
+        localStorage.setItem(clave, oscuro ? 'oscuro' : 'claro');
+      } catch {
+        /* sin localStorage: vale mientras dure la visita */
+      }
+      reflejar();
+    });
+    // Mientras no haya elección propia, sigue los cambios del sistema.
+    sistema.addEventListener('change', (evento) => {
+      if (guardado(clave)) return;
+      raiz.classList.toggle('dark', evento.matches);
+      reflejar();
+    });
+  });
+
+  reflejar();
+</script>

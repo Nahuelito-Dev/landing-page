@@ -1,0 +1,62 @@
+---
+/**
+ * «Cómo arrancás»: puesta en marcha de SPLG en cuatro pasos numerados (patrón Process.tsx).
+ * Secuencia real de onboarding guiado para una distribuidora.
+ */
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+
+const pasos = [
+  {
+    numero: '01',
+    titulo: 'Pedí la demo',
+    descripcion:
+      'Nos mostrás cómo trabajás hoy y vemos juntos el sistema adaptado a tu zona, tus vehículos y tus necesidades.',
+  },
+  {
+    numero: '02',
+    titulo: 'Cargamos tu catálogo, precios y zonas',
+    descripcion:
+      'Configuramos tus tipos de garrafa, precios por radio o franja, envases habilitados y medios de cobro.',
+  },
+  {
+    numero: '03',
+    titulo: 'Das de alta a tus choferes',
+    descripcion:
+      'Tus repartidores instalan la app en sus celulares y quedan listos para recibir pedidos asignados en segundos.',
+  },
+  {
+    numero: '04',
+    titulo: 'Recibís el primer pedido',
+    descripcion:
+      'Tus clientes piden desde su celular, el chofer más cercano entrega y vos ves todo el recorrido en el panel en vivo.',
+  },
+];
+---
+
+<section id="como-arrancas" class="border-t border-outline bg-bg py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-como-arrancas">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+      <EncabezadoSeccion
+        id="titulo-como-arrancas"
+        rotulo="Cómo arrancás"
+        titulo="De la demo a operar en cuatro pasos"
+        bajada="Una puesta en marcha simple y guiada para que tu distribuidora empiece a operar sin frenar el trabajo diario."
+      />
+    </div>
+
+    <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        pasos.map((paso) => (
+          <li class="tarjeta flex flex-col rounded-2xl border border-outline bg-surface p-6" data-revelar>
+            <span class="font-mono text-xs font-bold tracking-widest text-primary uppercase" aria-hidden="true">
+              {paso.numero}
+            </span>
+            <span class="sr-only">Paso {paso.numero}:</span>
+            <h3 class="mt-4 font-heading text-lg font-semibold text-ink leading-snug">{paso.titulo}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{paso.descripcion}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+---
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { modulosInteligentes, piezasPropias } from '../data/modulos';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+
+function icono(nombre: string): LucideIcon {
+  return (Icons as unknown as Record<string, LucideIcon>)[nombre];
+}
+---
+
+<section id="modulos" class="border-t border-outline bg-bg py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-modulos">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+      <EncabezadoSeccion
+        id="titulo-modulos"
+        rotulo="Módulos inteligentes"
+        titulo="Procesos que trabajan solos"
+        bajada="Siete módulos propios que toman decisiones con los datos de tu operación. Cada distribuidora los activa y los ajusta desde el panel."
+      />
+    </div>
+
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        modulosInteligentes.map((item) => {
+          const Icono = icono(item.icono);
+          return (
+            <li
+              class={`tarjeta group rounded-2xl border border-outline bg-surface/80 p-6 backdrop-blur ${
+                item.destacado ? 'sm:col-span-2 lg:col-span-3 lg:flex lg:items-start lg:gap-6' : ''
+              }`}
+              data-revelar
+            >
+              <span
+                class={`flex shrink-0 items-center justify-center rounded-xl ${
+                  item.destacado ? 'btn-primary h-12 w-12' : 'h-10 w-10 bg-accent-soft text-primary-strong ring-1 ring-inset ring-primary/15 transition-colors duration-300 group-hover:bg-primary group-hover:text-on-primary'
+                }`}
+              >
+                <Icono size={item.destacado ? 22 : 20} strokeWidth={1.8} aria-hidden="true" />
+              </span>
+              <div class="mt-5 lg:mt-0">
+                <h3 class={`font-heading font-semibold tracking-tight text-ink ${item.destacado ? 'text-lg' : 'text-base'}`}>
+                  {item.titulo}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-muted">{item.descripcion}</p>
+                {item.destacado && (
+                  <p class="mt-3 text-sm font-medium text-primary-strong">Incluido desde el plan Distribuidora.</p>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    <div class="mt-16" data-revelar>
+      <h3 class="font-heading text-xl font-semibold tracking-tight text-ink">Y las piezas propias del sistema</h3>
+      <ul class="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          piezasPropias.map((pieza) => {
+            const Icono = icono(pieza.icono);
+            return (
+              <li class="tarjeta rounded-xl border border-outline bg-surface/70 p-5 backdrop-blur">
+                <Icono size={20} strokeWidth={1.8} className="text-primary-strong" aria-hidden="true" />
+                <h4 class="mt-3 text-sm font-semibold text-ink">{pieza.titulo}</h4>
+                <p class="mt-1.5 text-sm leading-relaxed text-muted">{pieza.descripcion}</p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+</section>

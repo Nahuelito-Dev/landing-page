@@ -1,0 +1,254 @@
+---
+/**
+ * Asistente de muestra: responde con las preguntas frecuentes de src/data/faq.ts (búsqueda por palabras,
+ * en el navegador). No llama a ninguna API. Ofrece hablar con una persona (WhatsApp o el formulario).
+ * Sin JS no aparece.
+ */
+import { MessageCircle, Send, X } from 'lucide-react';
+import WhatsAppIcono from './WhatsAppIcono.astro';
+import { linkWhatsapp } from '../config/contacto';
+
+const whatsapp = linkWhatsapp();
+---
+
+<aside aria-label="Asistente de preguntas frecuentes" data-asistente>
+  <button
+    type="button"
+    class="asistente-lanzador btn-primary fixed bottom-24 right-5 z-40 hidden h-14 w-14 items-center justify-center rounded-full shadow-lg ring-4 ring-primary/15 transition-transform hover:scale-105 motion-reduce:hover:scale-100 sm:bottom-24 sm:right-6 [.js_&]:inline-flex"
+    aria-expanded="false"
+    aria-controls="asistente-panel"
+    data-lanzador
+  >
+    <span class="sr-only">Abrir el asistente de preguntas frecuentes</span>
+    <MessageCircle size={24} strokeWidth={1.9} aria-hidden="true" />
+  </button>
+
+  <div
+    id="asistente-panel"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="asistente-titulo"
+    aria-describedby="asistente-aviso"
+    hidden
+    class="fixed inset-x-3 bottom-42 z-40 flex max-h-[min(36rem,calc(100dvh-12rem))] flex-col overflow-hidden rounded-2xl border border-outline bg-surface shadow-[0_24px_60px_-16px_rgb(16_24_40/0.45)] sm:inset-x-auto sm:right-6 sm:w-[24rem]"
+    data-panel
+  >
+    <div class="flex items-start gap-3 border-b border-outline px-4 py-3">
+      <span class="btn-primary mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
+        <MessageCircle size={16} aria-hidden="true" />
+      </span>
+      <div class="min-w-0 flex-1">
+        <p id="asistente-titulo" class="text-sm font-semibold text-ink">Asistente de SPLG</p>
+        <p class="text-xs text-muted">Muestra con las preguntas frecuentes</p>
+      </div>
+      <button
+        type="button"
+        class="-mr-1 flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:bg-surface-muted hover:text-ink"
+        data-cerrar
+      >
+        <span class="sr-only">Cerrar el asistente</span>
+        <X size={18} aria-hidden="true" />
+      </button>
+    </div>
+
+    <p id="asistente-aviso" class="border-b border-outline bg-surface-sunken px-4 py-2.5 text-xs leading-relaxed text-ink-2">
+      Esto es una muestra: contesta sólo con las preguntas frecuentes de esta página, sin inteligencia artificial y
+      sin guardar lo que escribís.
+    </p>
+
+    <div class="flex-1 overflow-y-auto px-4 py-4" role="log" aria-live="polite" aria-relevant="additions" data-mensajes></div>
+
+    <form class="flex items-center gap-2 border-t border-outline p-3" data-form>
+      <label for="asistente-entrada" class="sr-only">Escribí tu pregunta</label>
+      <input
+        id="asistente-entrada"
+        type="text"
+        maxlength="200"
+        autocomplete="off"
+        placeholder="Escribí tu pregunta…"
+        class="min-h-11 min-w-0 flex-1 rounded-lg border border-outline-strong bg-surface px-3 text-base text-ink placeholder:text-muted focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+      />
+      <button type="submit" class="btn-primary flex h-11 w-11 shrink-0 items-center justify-center rounded-lg">
+        <span class="sr-only">Enviar</span>
+        <Send size={16} aria-hidden="true" />
+      </button>
+    </form>
+
+    <div class="flex flex-wrap items-center gap-2 border-t border-outline bg-surface-sunken px-3 py-2.5 text-xs">
+      <span class="font-medium text-ink-2">Hablar con una persona:</span>
+      {
+        whatsapp && (
+          <a
+            href={whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-8 items-center gap-1.5 rounded-md px-2 font-semibold text-primary-strong hover:bg-surface-muted"
+          >
+            <WhatsAppIcono size={13} />
+            WhatsApp
+            <span class="sr-only">(se abre WhatsApp)</span>
+          </a>
+        )
+      }
+      <a href="/#demo" class="inline-flex min-h-8 items-center rounded-md px-2 font-semibold text-primary-strong hover:bg-surface-muted" data-ir-formulario>
+        Formulario
+      </a>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { preguntasFrecuentes } from '../data/faq';
+  import { linkWhatsapp } from '../config/contacto';
+
+  const VACIAS = new Set(
+    'a al algo algun alguna como con cual cuales cuando de del el en es esta este hay la las le lo los me mi mis no o para pero por puedo que se si sin su sus tengo un una uno y ya yo tu tus vos hace hacer quiero saber sobre'.split(' '),
+  );
+
+  const normalizar = (texto: string) =>
+    texto
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9ñ\s]/g, ' ');
+
+  const palabras = (texto: string) => normalizar(texto).split(/\s+/).filter((p) => p.length > 2 && !VACIAS.has(p));
+
+  // Raíz corta: «cobro», «cobros», «cobrar» coinciden.
+  const raiz = (p: string) => p.slice(0, 5);
+
+  const indice = preguntasFrecuentes.map((item) => ({
+    item,
+    enPregunta: new Set(palabras(item.pregunta).map(raiz)),
+    enRespuesta: new Set(palabras(item.respuesta).map(raiz)),
+  }));
+
+  function buscar(consulta: string) {
+    const claves = [...new Set(palabras(consulta).map(raiz))];
+    if (claves.length === 0) return null;
+    let mejor: (typeof indice)[number] | null = null;
+    let puntaje = 0;
+    for (const entrada of indice) {
+      let p = 0;
+      for (const c of claves) {
+        if (entrada.enPregunta.has(c)) p += 3;
+        else if (entrada.enRespuesta.has(c)) p += 1;
+      }
+      if (p > puntaje) {
+        puntaje = p;
+        mejor = entrada;
+      }
+    }
+    return puntaje >= 2 ? mejor!.item : null;
+  }
+
+  const raizAside = document.querySelector<HTMLElement>('[data-asistente]');
+  if (raizAside) {
+    const lanzador = raizAside.querySelector<HTMLButtonElement>('[data-lanzador]')!;
+    const panel = raizAside.querySelector<HTMLElement>('[data-panel]')!;
+    const mensajes = raizAside.querySelector<HTMLElement>('[data-mensajes]')!;
+    const form = raizAside.querySelector<HTMLFormElement>('[data-form]')!;
+    const entrada = form.querySelector<HTMLInputElement>('input')!;
+    const whatsapp = linkWhatsapp();
+    let iniciado = false;
+
+    const burbuja = (quien: 'yo' | 'asistente', contenido: Node | string) => {
+      const fila = document.createElement('div');
+      fila.className = quien === 'yo' ? 'mb-3 flex justify-end' : 'mb-3 flex justify-start';
+      const globo = document.createElement('div');
+      globo.className =
+        quien === 'yo'
+          ? 'max-w-[85%] rounded-2xl rounded-br-md bg-primary px-3 py-2 text-sm text-on-primary'
+          : 'max-w-[90%] rounded-2xl rounded-bl-md bg-surface-muted px-3 py-2 text-sm leading-relaxed text-ink';
+      const etiqueta = document.createElement('span');
+      etiqueta.className = 'sr-only';
+      etiqueta.textContent = quien === 'yo' ? 'Vos: ' : 'Asistente: ';
+      globo.append(etiqueta, contenido);
+      fila.append(globo);
+      mensajes.append(fila);
+      mensajes.scrollTop = mensajes.scrollHeight;
+    };
+
+    const sugerencias = () => {
+      const caja = document.createElement('div');
+      caja.className = 'mb-3 flex flex-wrap gap-2';
+      for (const { pregunta } of preguntasFrecuentes.slice(0, 4)) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className =
+          'min-h-9 rounded-full border border-outline-strong bg-surface px-3 text-left text-xs font-medium text-ink-2 hover:border-primary hover:text-primary-strong';
+        b.textContent = pregunta;
+        b.addEventListener('click', () => responder(pregunta));
+        caja.append(b);
+      }
+      mensajes.append(caja);
+    };
+
+    const sinRespuesta = () => {
+      const caja = document.createElement('span');
+      caja.append('No encontré eso en las preguntas frecuentes. Una persona del equipo te puede responder: ');
+      if (whatsapp) {
+        const a = document.createElement('a');
+        a.href = whatsapp;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = 'font-semibold text-primary-strong underline underline-offset-2';
+        a.textContent = 'escribinos por WhatsApp';
+        caja.append(a, ' o ');
+      }
+      const f = document.createElement('a');
+      f.href = '/#demo';
+      f.className = 'font-semibold text-primary-strong underline underline-offset-2';
+      f.textContent = 'dejanos tus datos en el formulario';
+      f.addEventListener('click', () => cerrar(false));
+      caja.append(f, '.');
+      return caja;
+    };
+
+    function responder(texto: string) {
+      const consulta = texto.trim();
+      if (!consulta) return;
+      burbuja('yo', consulta);
+      const encontrada = buscar(consulta);
+      if (encontrada) {
+        const caja = document.createElement('span');
+        const titulo = document.createElement('strong');
+        titulo.className = 'block font-semibold';
+        titulo.textContent = encontrada.pregunta;
+        caja.append(titulo, encontrada.respuesta);
+        burbuja('asistente', caja);
+      } else {
+        burbuja('asistente', sinRespuesta());
+      }
+    }
+
+    const abrir = () => {
+      panel.hidden = false;
+      lanzador.setAttribute('aria-expanded', 'true');
+      if (!iniciado) {
+        iniciado = true;
+        burbuja('asistente', 'Hola. Preguntame sobre pedidos, choferes, cobros, envases o seguridad. Estas son algunas preguntas:');
+        sugerencias();
+      }
+      entrada.focus();
+    };
+
+    function cerrar(devolverFoco = true) {
+      panel.hidden = true;
+      lanzador.setAttribute('aria-expanded', 'false');
+      if (devolverFoco) lanzador.focus();
+    }
+
+    lanzador.addEventListener('click', () => (panel.hidden ? abrir() : cerrar()));
+    raizAside.querySelector('[data-cerrar]')?.addEventListener('click', () => cerrar());
+    raizAside.querySelector('[data-ir-formulario]')?.addEventListener('click', () => cerrar(false));
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') cerrar();
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      responder(entrada.value);
+      entrada.value = '';
+    });
+  }
+</script>

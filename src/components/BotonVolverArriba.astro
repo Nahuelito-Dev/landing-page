@@ -1,0 +1,59 @@
+---
+/**
+ * Botón flotante «Volver arriba» (patrón ScrollButton.tsx).
+ * Aparece abajo a la izquierda al hacer scroll para no chocar con el asistente ni con WhatsApp.
+ * Respeta prefers-reduced-motion en el desplazamiento.
+ */
+import { ArrowUp } from 'lucide-react';
+---
+
+<button
+  type="button"
+  id="btn-volver-arriba"
+  aria-label="Volver arriba"
+  class="btn-secondary fixed bottom-5 left-5 z-40 flex h-12 w-12 items-center justify-center rounded-full shadow-[0_4px_16px_rgb(16_24_40/0.12)] transition-all duration-300 opacity-0 pointer-events-none translate-y-3 sm:bottom-6 sm:left-6 hover:scale-105 motion-reduce:hover:scale-100 motion-reduce:transition-none"
+  data-volver-arriba
+>
+  <ArrowUp size={20} strokeWidth={2.2} aria-hidden="true" />
+</button>
+
+<script>
+  function iniciarBotonVolverArriba() {
+    const boton = document.querySelector<HTMLButtonElement>('[data-volver-arriba]');
+    if (!boton) return;
+
+    const umbral = 350;
+
+    const actualizarVisibilidad = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      if (scrollY > umbral) {
+        boton.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-3');
+        boton.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      } else {
+        boton.classList.add('opacity-0', 'pointer-events-none', 'translate-y-3');
+        boton.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+      }
+    };
+
+    window.addEventListener('scroll', actualizarVisibilidad, { passive: true });
+    actualizarVisibilidad();
+
+    boton.addEventListener('click', () => {
+      const movimientoReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: 0,
+        behavior: movimientoReducido ? 'auto' : 'smooth',
+      });
+      // Devolver foco al enlace de saltar al contenido o al inicio para accesibilidad
+      const destino = document.getElementById('inicio') || document.body;
+      destino.focus({ preventScroll: true });
+    });
+  }
+
+  // Ejecutar al cargar y si Astro hace transiciones de página
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciarBotonVolverArriba, { once: true });
+  } else {
+    iniciarBotonVolverArriba();
+  }
+</script>

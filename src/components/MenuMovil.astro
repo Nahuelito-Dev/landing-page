@@ -1,0 +1,98 @@
+---
+import { Menu, X } from 'lucide-react';
+import type { EnlaceNav } from '../data/navegacion';
+
+type Props = {
+  enlaces: EnlaceNav[];
+};
+
+const { enlaces } = Astro.props;
+---
+
+<div class="lg:hidden">
+  <button
+    type="button"
+    id="boton-menu-movil"
+    aria-expanded="false"
+    aria-controls="panel-menu-movil"
+    class="-mr-1 flex h-11 w-11 items-center justify-center rounded-md text-ink"
+  >
+    <span class="sr-only" data-texto-abrir>Abrir menú</span>
+    <span class="sr-only hidden" data-texto-cerrar>Cerrar menú</span>
+    <span data-icono-abrir><Menu aria-hidden="true" /></span>
+    <span data-icono-cerrar class="hidden"><X aria-hidden="true" /></span>
+  </button>
+
+  <div
+    id="panel-menu-movil"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Menú de navegación"
+    hidden
+    class="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col gap-1 overflow-y-auto bg-surface px-6 py-6"
+  >
+    {
+      enlaces.map((enlace) => (
+        <a href={enlace.href} class="rounded-md border-b border-outline-soft px-3 py-3.5 text-lg font-medium text-ink hover:bg-bg" data-cierra-menu>
+          {enlace.label}
+        </a>
+      ))
+    }
+
+    <a
+      href="/#demo"
+      class="btn-primary mt-4 inline-flex min-h-12 items-center justify-center rounded-lg px-4 text-center text-base font-semibold"
+      data-cierra-menu
+    >
+      Pedir una demo
+    </a>
+  </div>
+</div>
+
+<script>
+  const boton = document.getElementById('boton-menu-movil');
+  const panel = document.getElementById('panel-menu-movil');
+
+  if (boton && panel) {
+    const iconoAbrir = boton.querySelector('[data-icono-abrir]');
+    const iconoCerrar = boton.querySelector('[data-icono-cerrar]');
+    const textoAbrir = boton.querySelector('[data-texto-abrir]');
+    const textoCerrar = boton.querySelector('[data-texto-cerrar]');
+
+    function abrir() {
+      panel!.hidden = false;
+      boton!.setAttribute('aria-expanded', 'true');
+      iconoAbrir?.classList.add('hidden');
+      iconoCerrar?.classList.remove('hidden');
+      textoAbrir?.classList.add('hidden');
+      textoCerrar?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function cerrar() {
+      panel!.hidden = true;
+      boton!.setAttribute('aria-expanded', 'false');
+      iconoAbrir?.classList.remove('hidden');
+      iconoCerrar?.classList.add('hidden');
+      textoAbrir?.classList.remove('hidden');
+      textoCerrar?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    boton.addEventListener('click', () => {
+      if (panel!.hidden) abrir();
+      else cerrar();
+    });
+
+    document.addEventListener('keydown', (evento) => {
+      if (evento.key === 'Escape' && !panel!.hidden) {
+        cerrar();
+        boton!.focus();
+      }
+    });
+
+    panel.querySelectorAll('[data-cierra-menu]').forEach((el) => {
+      el.addEventListener('click', cerrar);
+    });
+  }
+</script>

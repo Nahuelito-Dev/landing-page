@@ -1,0 +1,49 @@
+---
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { puntosSeguridad } from '../data/seguridad';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+
+function icono(nombre: string): LucideIcon {
+  return (Icons as unknown as Record<string, LucideIcon>)[nombre];
+}
+---
+
+<section id="seguridad" class="side-glow py-20 text-white sm:py-24 lg:py-28" aria-labelledby="titulo-seguridad">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between" data-revelar>
+      <EncabezadoSeccion
+        id="titulo-seguridad"
+        invertido
+        rotulo="Seguridad y datos"
+        titulo="Los datos de tu distribuidora, cuidados"
+        bajada="Lo que hace el sistema hoy para proteger tu información y la de tus clientes."
+      />
+      <a
+        href="/seguridad/"
+        class="enlace-flecha inline-flex min-h-11 shrink-0 items-center gap-2 self-start rounded-lg border border-side-line bg-side-raised px-4 text-sm font-semibold text-white transition-colors hover:border-side-accent lg:self-auto"
+      >
+        Ver el detalle
+        <ArrowRight size={16} className="flecha" aria-hidden="true" />
+      </a>
+    </div>
+
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        puntosSeguridad.map(({ icono: nombre, titulo, resumen }) => {
+          const Icono = icono(nombre);
+          return (
+            <li class="tarjeta-oscura rounded-2xl border border-side-line bg-side/60 p-6 backdrop-blur" data-revelar>
+              <span class="flex h-11 w-11 items-center justify-center rounded-xl border border-side-line bg-side-raised">
+                <Icono size={20} strokeWidth={1.8} className="text-side-accent" aria-hidden="true" />
+              </span>
+              <h3 class="mt-4 font-heading text-base font-semibold tracking-tight text-white">{titulo}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-side-text">{resumen}</p>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

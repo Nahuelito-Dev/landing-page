@@ -1,0 +1,112 @@
+---
+import { ArrowRight, CheckCircle2, Play } from 'lucide-react';
+import { empresa } from '../config/empresa';
+import SelectorTema from './SelectorTema.astro';
+import MockPanel from './MockPanel.astro';
+
+const piezas = ['App del cliente', 'App del chofer', 'Panel de la distribuidora'];
+---
+
+<section id="inicio" class="relative overflow-hidden border-b border-outline bg-surface" aria-labelledby="titulo-hero">
+  <div class="reticula pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div
+    class="pointer-events-none absolute -top-40 right-[-10%] h-[36rem] w-[36rem] rounded-full bg-primary-soft blur-3xl"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div
+    class="relative mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-[0.92fr_1.1fr] lg:items-center lg:gap-14 lg:pb-24 lg:pt-20"
+  >
+    <div class="min-w-0">
+      <p
+        class="eyebrow inline-flex items-center gap-2 rounded-full border border-outline bg-surface/80 px-3 py-1.5 shadow-[0_1px_2px_rgb(16_24_40/0.05)] backdrop-blur"
+      >
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-40"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
+        </span>
+        Para distribuidoras de gas
+      </p>
+      <h1
+        id="titulo-hero"
+        class="mt-4 text-balance font-heading text-[2.15rem] font-semibold leading-[1.06] tracking-[-0.035em] text-ink sm:text-5xl lg:text-[3.4rem]"
+      >
+        Pedidos, reparto y envases de tu distribuidora, <span class="text-primary-strong">en un solo sistema</span>
+      </h1>
+      <p class="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
+        Tus clientes piden desde el celular, el pedido le llega solo al chofer más cercano y vos seguís cada entrega,
+        cada cobro y cada envase desde el panel. Un producto de {empresa.nombre}.
+      </p>
+
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <a
+          href="#demo"
+          class="btn-primary enlace-flecha inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold"
+        >
+          Pedir una demo
+          <ArrowRight size={18} className="flecha" aria-hidden="true" />
+        </a>
+        <a
+          href="#como-funciona"
+          class="btn-secondary inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold"
+        >
+          <Play size={16} aria-hidden="true" />
+          Ver el sistema en acción
+        </a>
+      </div>
+
+      <div class="mt-10 border-t border-outline pt-6">
+        <SelectorTema />
+      </div>
+    </div>
+
+    <div class="relative min-w-0 lg:pl-2 xl:-mr-10">
+      <MockPanel />
+      <!-- Aviso flotante: lo que ve el panel cuando un chofer entrega (decorativo) -->
+      <div
+        class="aviso-flotante absolute -top-5 right-4 hidden items-center gap-2.5 rounded-xl border border-outline bg-surface/95 py-2 pl-2 pr-3.5 shadow-[0_16px_36px_-16px_rgb(16_24_40/0.4)] backdrop-blur sm:flex lg:-right-3"
+        aria-hidden="true"
+      >
+        <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-success-soft text-success">
+          <CheckCircle2 size={15} strokeWidth={2.2} />
+        </span>
+        <span class="text-[11px] leading-tight">
+          <span class="block font-semibold text-ink">Pedido entregado</span>
+          <span class="block font-mono text-[10px] text-muted">#3A91C0 · confirmado con QR</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative border-t border-outline bg-surface-sunken/80">
+    <ul
+      class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-2 px-4 py-4 text-sm font-medium text-ink-2 sm:px-6"
+      aria-label="Las tres piezas de SPLG"
+    >
+      {
+        piezas.map((pieza, i) => (
+          <li class="flex items-center gap-2">
+            <span class="font-mono text-xs text-primary-strong">0{i + 1}</span>
+            {pieza}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .aviso-flotante {
+    animation: flotar 5s ease-in-out infinite;
+  }
+  @keyframes flotar {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -6px;
+    }
+  }
+</style>

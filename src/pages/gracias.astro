@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CheckCircle2 } from 'lucide-react';
+import WhatsAppIcono from '../components/WhatsAppIcono.astro';
+import { linkWhatsapp } from '../config/contacto';
+import { empresa } from '../config/empresa';
+
+const whatsapp = linkWhatsapp();
+---
+
+<BaseLayout
+  title="¡Gracias! — SPLG"
+  description="Recibimos tu pedido de demo de SPLG."
+  noindex
+>
+  <section class="bg-bg">
+    <div class="mx-auto flex min-h-[70vh] max-w-xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6">
+      <span class="flex h-14 w-14 items-center justify-center rounded-full bg-success-soft text-success">
+        <CheckCircle2 size={28} strokeWidth={1.8} aria-hidden="true" />
+      </span>
+      <h1 class="mt-6 font-heading text-3xl font-semibold text-ink sm:text-4xl">¡Gracias!</h1>
+      <p class="mt-4 text-pretty text-base leading-relaxed text-muted sm:text-lg">
+        Recibimos tu pedido de demo. El equipo de {empresa.nombre} te va a escribir para coordinar el día y la hora.
+      </p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/" class="btn-secondary inline-flex min-h-12 items-center justify-center rounded-lg px-6 text-base font-semibold">
+          Volver al inicio
+        </a>
+        {
+          whatsapp && (
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-6 text-base font-semibold"
+            >
+              <WhatsAppIcono size={18} />
+              Escribinos por WhatsApp
+              <span class="sr-only">(se abre WhatsApp)</span>
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

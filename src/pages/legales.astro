@@ -1,0 +1,39 @@
+---
+import PaginaTexto from '../layouts/PaginaTexto.astro';
+import AvisoBorrador from '../components/AvisoBorrador.astro';
+import { empresa } from '../config/empresa';
+import { contacto } from '../config/contacto';
+---
+
+<PaginaTexto
+  title="Legales — SPLG"
+  description={`Política de privacidad, términos y condiciones e información legal de SPLG, un producto de ${empresa.nombre}.`}
+  rotulo="Legales"
+  titulo="Información legal"
+  bajada={`Todo lo legal de SPLG, un producto de ${empresa.nombre}, en un solo lugar.`}
+>
+  <AvisoBorrador />
+
+  <h2>Documentos</h2>
+  <ul>
+    <li>
+      <a href="/privacidad/">Política de privacidad</a>: qué datos tratamos, para qué y cómo ejercer tus derechos según la
+      Ley 25.326.
+    </li>
+    <li><a href="/terminos/">Términos y condiciones</a>: las reglas del servicio para las distribuidoras.</li>
+    <li><a href="/seguridad/">Seguridad y datos</a>: cómo se protege la información en SPLG.</li>
+  </ul>
+
+  <h2>Quién presta el servicio</h2>
+  <p>
+    SPLG es un producto de <strong>{empresa.nombre}</strong>, {empresa.lugar}. Contacto: WhatsApp {contacto.whatsappVisible}{
+      contacto.email ? `, ${contacto.email}` : ''
+    }.
+  </p>
+
+  <h2>Marcas de terceros</h2>
+  <p>
+    Mercado Pago, WhatsApp, Google Maps, Google Play y App Store son marcas de sus respectivos dueños y se mencionan sólo
+    para describir con qué servicios funciona SPLG.
+  </p>
+</PaginaTexto>

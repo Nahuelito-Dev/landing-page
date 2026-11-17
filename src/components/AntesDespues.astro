@@ -1,0 +1,61 @@
+---
+import * as Icons from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { Check, X } from 'lucide-react';
+import { comparaciones } from '../data/antesDespues';
+import EncabezadoSeccion from './EncabezadoSeccion.astro';
+
+function icono(nombre: string): LucideIcon {
+  return (Icons as unknown as Record<string, LucideIcon>)[nombre];
+}
+---
+
+<section class="bg-bg py-20 sm:py-24 lg:py-28" aria-labelledby="titulo-antes-despues">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <div data-revelar>
+      <EncabezadoSeccion
+        id="titulo-antes-despues"
+        rotulo="Antes y después"
+        titulo="De la planilla y el WhatsApp a un sistema"
+        bajada="Una distribuidora a pulmón funciona, hasta que crece. Esto es lo que cambia, tema por tema."
+      />
+    </div>
+
+    <div class="mt-12" data-revelar>
+      <div class="mb-3 hidden grid-cols-[11rem_1fr_1fr] font-mono text-xs font-semibold uppercase tracking-[0.12em] lg:grid" aria-hidden="true">
+        <span class="px-6 py-2 text-muted">Tema</span>
+        <span class="px-6 py-2 text-ink-2">Con planilla, cuaderno y WhatsApp</span>
+        <span class="px-6 py-2 text-primary-strong">Con SPLG</span>
+      </div>
+      <ul class="flex flex-col gap-3">
+        {
+          comparaciones.map(({ icono: nombre, tema, antes, despues }) => {
+            const Icono = icono(nombre);
+            return (
+              <li class="tarjeta grid gap-4 rounded-2xl border border-outline bg-surface/80 p-5 backdrop-blur sm:p-6 lg:grid-cols-[11rem_1fr_1fr] lg:gap-0 lg:p-0">
+                <h3 class="flex items-center gap-2.5 font-heading text-base font-semibold tracking-tight text-ink lg:px-6 lg:py-5">
+                  <Icono size={18} strokeWidth={1.8} className="shrink-0 text-muted" aria-hidden="true" />
+                  {tema}
+                </h3>
+                <p class="flex gap-2.5 text-sm leading-relaxed text-muted lg:border-l lg:border-outline lg:px-6 lg:py-5">
+                  <X size={16} strokeWidth={2.2} className="mt-0.5 shrink-0 text-danger" aria-hidden="true" />
+                  <span>
+                    <span class="font-medium text-ink-2 lg:sr-only">Antes: </span>
+                    {antes}
+                  </span>
+                </p>
+                <p class="flex gap-2.5 rounded-xl bg-primary-soft p-3 text-sm leading-relaxed text-ink lg:rounded-none lg:rounded-r-2xl lg:border-l lg:border-outline lg:bg-primary-soft/60 lg:px-6 lg:py-5">
+                  <Check size={16} strokeWidth={2.4} className="mt-0.5 shrink-0 text-primary-strong" aria-hidden="true" />
+                  <span>
+                    <span class="font-semibold text-primary-strong lg:sr-only">Con SPLG: </span>
+                    {despues}
+                  </span>
+                </p>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </div>
+</section>
